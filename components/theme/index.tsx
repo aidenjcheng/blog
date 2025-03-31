@@ -29,13 +29,16 @@ export const AppThemeSwitcher = () => {
   ];
 
   return (
-    <span className="flex w-fit items-center gap-0.5 overflow-hidden rounded-[6px] bg-gray-2 p-[2px]">
+    <span className="flex w-fit items-center gap-0.5 overflow-hidden rounded-[6px] bg-gray-3 p-[2px]">
       {buttons.map(({ label, icon, active }) => (
         <button
           type="button"
           key={label}
           onClick={() => setTheme(label)}
-          className={cn("ransition-all flex h-6 w-6 items-center justify-center rounded-[4px] hover:opacity-50", active ? "bg-gray-4 text-foreground" : "")}
+          className={cn(
+            "transition-all flex h-6 w-6 items-center justify-center rounded-[4px] hover:opacity-50",
+            active ? "bg-background text-foreground 5" : "",
+          )}
         >
           {icon}
         </button>
@@ -50,7 +53,12 @@ export const AppThemeProvider = ({
   children: React.ReactNode;
 }) => {
   return (
-    <ThemeProvider enableSystem={true} attribute="class" storageKey="theme" defaultTheme="system">
+    <ThemeProvider
+      enableSystem={true}
+      attribute="class"
+      storageKey="theme"
+      defaultTheme="system"
+    >
       {children}
     </ThemeProvider>
   );

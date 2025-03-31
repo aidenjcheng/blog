@@ -168,8 +168,9 @@ const config: Config = {
         },
       });
     }),
+    require("tailwindcss-animate"),
   ],
-  darkMode: "class",
+  darkMode: ["class", "class"],
 };
 
 export default config;
