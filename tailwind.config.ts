@@ -3,7 +3,6 @@ import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
 
 const config: Config = {
-  important: true,
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -13,6 +12,11 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      boxShadow: {
+        card: "rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.05) 0px 9px 24px",
+        "dark-card":
+          "rgba(240, 240, 240, 0.05) 0px 0px 0px 1px, rgba(240, 240, 240, 0.1) 0px 3px 6px, rgba(240, 240, 240, 0.05) 0px 9px 24px",
+      },
       colors: {
         gray: {
           1: "var(--gray-1)",

@@ -23,6 +23,9 @@ importers:
       '@next/mdx':
         specifier: ^14.2.15
         version: 14.2.15(@mdx-js/loader@3.0.1(webpack@5.95.0))(@mdx-js/react@3.0.1(@types/react@18.3.11)(react@18.3.1))
+      '@paper-design/shaders-react':
+        specifier: ^0.0.29
+        version: 0.0.29
       '@radix-ui/colors':
         specifier: ^3.0.0
         version: 3.0.0
@@ -649,6 +652,12 @@ packages:
   '@nolyfill/is-core-module@1.0.39':
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
+
+  '@paper-design/shaders-react@0.0.29':
+    resolution: {integrity: sha512-jtqb2nN45lMMFd2wSTCNfU4f2xjpT6zwIr+1uUPuoKME90aEXJnOQwUs1iPs/wmezH9VNwCvr+teszcDdgWAiA==}
+
+  '@paper-design/shaders@0.0.26':
+    resolution: {integrity: sha512-a98Pt9xtJpSrvBLzRZrcgfAuctJU3NxlbBHHmztuSjkRxjRk7KmgrI9TZXRGrHVP/6qV0Qt4d6iQmTu2HGHbpw==}
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -4395,6 +4404,13 @@ snapshots:
       fastq: 1.17.1
 
   '@nolyfill/is-core-module@1.0.39': {}
+
+  '@paper-design/shaders-react@0.0.29':
+    dependencies:
+      '@paper-design/shaders': 0.0.26
+      react: 18.3.1
+
+  '@paper-design/shaders@0.0.26': {}
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
