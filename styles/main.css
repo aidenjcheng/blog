@@ -83,9 +83,11 @@
     h1 {
       @apply text-[16px];
     }
+
     h2 {
       @apply text-[15.5px];
     }
+
     h3 {
       @apply text-[15px];
     }

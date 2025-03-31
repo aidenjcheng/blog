@@ -1,9 +1,9 @@
 .collapsible {
   display: flex;
-  width: 14rem;
-  min-height: 9rem;
   flex-direction: column;
   justify-content: center;
+  width: 14rem;
+  min-height: 9rem;
   color: var(--color-gray-900);
 }
 
@@ -14,26 +14,26 @@
 }
 
 .trigger {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0;
-  border: 0;
-  outline: 0;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  background-color: var(--color-gray-100);
-  color: var(--color-gray-900);
-  font-family: inherit;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  font-weight: 500;
-
   @media (hover: hover) {
     &:hover {
       background-color: var(--color-gray-200);
     }
   }
+
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  margin: 0;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  color: var(--color-gray-900);
+  background-color: var(--color-gray-100);
+  border: 0;
+  border-radius: 0.25rem;
+  outline: 0;
 
   &:active {
     background-color: var(--color-gray-200);
@@ -43,16 +43,16 @@
     outline: 2px solid var(--color-blue);
   }
 
-  &[data-panel-open] .Icon {
+  &[data-panel-open] .icon {
     transform: rotate(90deg);
   }
 }
 
 .panel {
   display: flex;
-  height: var(--collapsible-panel-height);
   flex-direction: column;
   justify-content: end;
+  height: var(--collapsible-panel-height);
   overflow: hidden;
   font-size: 0.875rem;
   line-height: 1.25rem;
@@ -68,9 +68,9 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin-top: 0.25rem;
   padding: 0.5rem 0 0.5rem 1.75rem;
-  border-radius: 0.25rem;
-  background-color: var(--color-gray-100);
+  margin-top: 0.25rem;
   cursor: text;
+  background-color: var(--color-gray-100);
+  border-radius: 0.25rem;
 }
