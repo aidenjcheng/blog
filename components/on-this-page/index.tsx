@@ -2,12 +2,26 @@
 
 import { cn } from "@/lib/cn";
 
-import { motion } from "framer-motion";
+import { Collapsible } from "@base-ui-components/react/collapsible";
+import { motion, MotionValue, useTransform } from "framer-motion";
 import React, { useCallback, useEffect, useState } from "react";
 
-export const TableOfContents = () => {
-  const [headings, setHeadings] = useState<{ id: string; text: string; level: string }[]>([]);
-  const [visibleHeadings, setVisibleHeadings] = useState<Set<string>>(new Set());
+import "./collapsible.css";
+
+export const TableOfContents = ({
+  title,
+  // scrollY,
+}: {
+  title: string;
+  // scrollY: MotionValue;
+}) => {
+  const [headings, setHeadings] = useState<
+    { id: string; text: string; level: string }[]
+  >([]);
+  const [open, setOpen] = useState(false);
+  const [visibleHeadings, setVisibleHeadings] = useState<Set<string>>(
+    new Set(),
+  );
 
   const getHeadings = useCallback(() => {
     return Array.from(document.querySelectorAll("h1, h2, h3"))
@@ -45,7 +59,10 @@ export const TableOfContents = () => {
       setVisibleHeadings(new Set(visibleSet));
     };
 
-    const observer = new IntersectionObserver(handleIntersection, observerOptions);
+    const observer = new IntersectionObserver(
+      handleIntersection,
+      observerOptions,
+    );
 
     for (const heading of collectedHeadings) {
       const element = document.getElementById(heading.id);
@@ -81,39 +98,52 @@ export const TableOfContents = () => {
 
   return (
     <React.Fragment>
-      <motion.nav
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.25 }}
-        className={cn(
-          "top-[10rem] right-auto left-[2rem] hidden",
-          "xl:top-[6rem] xl:right-[6rem] xl:left-auto xl:block",
-          "fixed mt-0 h-full w-48 justify-start space-y-4 transition",
-        )}
-      >
-        <div className="mt-0 flex flex-col gap-0">
-          {headings.map((heading) => (
-            <div key={heading.id} className="mt-0">
-              <button
-                type="button"
-                onClick={() => scroll(heading.id)}
-                className={cn({
-                  "mt-0 ml-2 border-l border-l-gray-4 py-1 text-left text-muted opacity-100 transition ease-in-out hover:opacity-50": true,
-                  "text-bold text-gray-12": visibleHeadings.has(heading.id),
-                  "pl-4": heading.level === "h1",
-                  "pl-6": heading.level === "h2",
-                  "pl-7": heading.level === "h3",
-                  "border-l border-l-gray-12": visibleHeadings.has(heading.id),
-                })}
-                data-active={visibleHeadings.has(heading.id) ? "true" : "false"}
-              >
-                {heading.text}
-              </button>
+      <Collapsible.Root open={open} onOpenChange={setOpen}>
+        <nav
+          className={cn(
+            "bottom-10 left-1/2",
+            "flex flex-col items-center -translate-x-1/2",
+            "fixed mt-0 bg-gray-12 max-w-1/2 justify-start space-y-4 transition-all p-2 px-4 rounded-3xl",
+          )}
+        >
+          <Collapsible.Trigger className="">
+            <div className="flex items-center gap-2 text-white-a11">
+              <div>{title}</div>
+              {/* Progress indicator */}
+              <div className="relative h-4 w-20 bg-gray-600 overflow-hidden">
+                <motion.div className="absolute top-0 left-0 h-full bg-white rounded-full" />
+              </div>
             </div>
-          ))}
-        </div>
-      </motion.nav>
+          </Collapsible.Trigger>
+          <Collapsible.Panel className={"w-full transition-all panel"}>
+            <div className="mt-0 flex flex-col gap-0 w-full ">
+              {headings.map((heading) => (
+                <div key={heading.id} className="mt-0 w-full">
+                  <button
+                    type="button"
+                    onClick={() => scroll(heading.id)}
+                    className={cn({
+                      "mt-0   py-1  text-left text-muted opacity-100 transition ease-in-out hover:text-white-a9 w-full":
+                        true,
+                      "text-bold text-white-a12": visibleHeadings.has(
+                        heading.id,
+                      ),
+                      // "": heading.level === "h1",
+                      // "pl-2": heading.level === "h2",
+                      // "pl-4": heading.level === "h3",
+                    })}
+                    data-active={
+                      visibleHeadings.has(heading.id) ? "true" : "false"
+                    }
+                  >
+                    {heading.text}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </Collapsible.Panel>
+        </nav>
+      </Collapsible.Root>
     </React.Fragment>
   );
 };

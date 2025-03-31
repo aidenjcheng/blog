@@ -13,9 +13,7 @@ export default function Home() {
       <div className="flex justify-between">
         <div className="text-lg">
           <Logo className="w-12 h-12" />
-          <h1>
-            <strong>Aiden Cheng</strong> is a software engineer
-          </h1>
+          <h1>hi</h1>
           <p className="text-muted mt-5">
             I'm Aiden Cheng, a high school student in{" "}
             <PreviewLink component={<img src="./assets/imgs/md.png" />}>

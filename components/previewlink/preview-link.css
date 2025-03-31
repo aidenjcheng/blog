@@ -1,14 +1,19 @@
-.Paragraph {
+.paragraph {
+  max-width: 16rem;
   margin: 0;
   font-size: 1rem;
   line-height: 1.5rem;
   color: var(--color-gray-900);
   text-wrap: balance;
-  max-width: 16rem;
 }
 
-.Link {
-  outline: 0;
+.link {
+  @media (hover: hover) {
+    &:hover {
+      text-decoration-line: underline;
+    }
+  }
+
   color: var(--color-blue);
   text-decoration-line: none;
   text-decoration-thickness: 1px;
@@ -18,44 +23,20 @@
     transparent 40%
   );
   text-underline-offset: 2px;
-
-  @media (hover: hover) {
-    &:hover {
-      text-decoration-line: underline;
-    }
-  }
+  outline: 0;
 
   &[data-popup-open] {
     text-decoration-line: underline;
   }
 
   &:focus-visible {
+    text-decoration-line: none;
     border-radius: 0.125rem;
     outline: 2px solid var(--color-blue);
-    text-decoration-line: none;
   }
 }
 
-.Popup {
-  box-sizing: border-box;
-  width: 240px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  border-radius: 1rem;
-  overflow: hidden;
-  background-color: canvas;
-  transform-origin: var(--transform-origin);
-  transition:
-    transform 150ms,
-    opacity 150ms;
-
-  &[data-starting-style],
-  &[data-ending-style] {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-
+.popup {
   @media (prefers-color-scheme: light) {
     outline: 1px solid var(--color-gray-200);
     box-shadow:
@@ -67,9 +48,28 @@
     outline: 1px solid var(--color-gray-300);
     outline-offset: -1px;
   }
+
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 240px;
+  overflow: hidden;
+  background-color: canvas;
+  border-radius: 1rem;
+  transition:
+    transform 150ms,
+    opacity 150ms;
+  transform-origin: var(--transform-origin);
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    opacity: 0;
+    transform: scale(0.95);
+  }
 }
 
-.Arrow {
+.arrow {
   display: flex;
 
   &[data-side="top"] {
@@ -93,30 +93,30 @@
   }
 }
 
-.ArrowFill {
+.arrow-fill {
   fill: canvas;
 }
 
-.ArrowOuterStroke {
+.arrow-outer-stroke {
   @media (prefers-color-scheme: light) {
     fill: var(--color-gray-200);
   }
 }
 
-.ArrowInnerStroke {
+.arrow-inner-stroke {
   @media (prefers-color-scheme: dark) {
     fill: var(--color-gray-300);
   }
 }
 
-.Image {
+.image {
   display: block;
   width: 100%;
   height: auto;
   border-radius: 0.25rem;
 }
 
-.Summary {
+.summary {
   margin: 0;
   font-size: 0.875rem;
   line-height: 1.25rem;

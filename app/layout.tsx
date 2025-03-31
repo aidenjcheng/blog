@@ -26,7 +26,7 @@ export default function RootLayout({
     <html lang="en" className={clsx(inter.className)} suppressHydrationWarning>
       <body>
         <Providers>
-          <main className="mx-auto max-w-xl overflow-x-hidden px-6 py-24 md:overflow-x-visible ">
+          <main className="mx-auto max-w-xl overflow-x-hidden px-6 py-24 md:overflow-x-visible min-h-screen pb-[240px]">
             <article className="article isolate">{children}</article>
           </main>
         </Providers>

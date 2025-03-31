@@ -25,7 +25,7 @@ export const PreviewLink = ({
       </PreviewCard.Trigger>
       <PreviewCard.Portal>
         <PreviewCard.Positioner sideOffset={8}>
-          <PreviewCard.Popup className="bg-background rounded-lg shadow-lg border border-border max-w-md Popup">
+          <PreviewCard.Popup className="bg-background rounded-lg shadow-lg border border-border max-w-md popup">
             <PreviewCard.Arrow className="fill-card stroke-border" />
             {component}
           </PreviewCard.Popup>

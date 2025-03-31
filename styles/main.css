@@ -8,7 +8,6 @@
 @import url("@radix-ui/colors/pink-dark-alpha.css");
 @import url("@radix-ui/colors/yellow.css");
 @import url("@radix-ui/colors/blue.css");
-
 @import url("@radix-ui/colors/yellow-alpha.css");
 @import url("@radix-ui/colors/yellow-dark.css");
 @import url("@radix-ui/colors/yellow-dark-alpha.css");
@@ -320,6 +319,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }

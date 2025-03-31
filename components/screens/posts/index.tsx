@@ -36,20 +36,20 @@ export const Layout = ({ post, route }: Props) => {
     <React.Fragment>
       <div className="flex flex-col">
         <div>
-          <h1>{post.title}</h1>
+          <h1 className="font-medium text-xl">{post.title}</h1>
         </div>
         <div className="mt-1 flex gap-2 text-muted text-small">
-          <PublishedTime />
-          <Seperator />
-          <UpdateTime />
-          <Seperator />
-          <ReadingTime />
+          {/* <PublishedTime /> */}
+          {/* <Seperator /> */}
+          {/* <UpdateTime /> */}
+          {/* <Seperator /> */}
+          {/* <ReadingTime /> */}
         </div>
       </div>
 
       <MDX source={post.content} />
       <PostNavigation posts={posts} />
-      <TableOfContents />
+      <TableOfContents title={post.title} />
     </React.Fragment>
   );
 };

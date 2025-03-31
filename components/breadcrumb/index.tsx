@@ -3,9 +3,12 @@
 import { cn } from "@/lib/cn";
 
 import { ChevronRightIcon } from "@radix-ui/react-icons";
+import { SlashDivider } from "@untitled-ui/icons-react";
 import { Link } from "next-view-transitions";
 import { usePathname } from "next/navigation";
 import React from "react";
+
+import Logo from "../logo/logo";
 
 export const Breadcrumb = () => {
   const pathname = usePathname();
@@ -24,9 +27,9 @@ export const Breadcrumb = () => {
       )}
     >
       <Link className="text-muted" href="/">
-        Home
+        <Logo className="size-5" />
       </Link>
-      <ChevronRightIcon className="text-muted" />
+      <SlashDivider className="text-muted size-4" />
       {paths.map((path, index) => {
         const href = `/${paths
           .slice(0, index + 1)
@@ -38,14 +41,14 @@ export const Breadcrumb = () => {
         return (
           <React.Fragment key={path}>
             {isLast ? (
-              <span className="text-muted">{path}</span>
+              <span className="text-foreground">{path}</span>
             ) : (
               <Link className="text-muted" href={href}>
                 {path}
               </Link>
             )}
             {index < paths.length - 1 && (
-              <ChevronRightIcon className="text-muted" />
+              <SlashDivider className="text-muted size-4" />
             )}
           </React.Fragment>
         );
