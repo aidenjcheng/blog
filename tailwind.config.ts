@@ -14,8 +14,7 @@ const config: Config = {
     extend: {
       boxShadow: {
         card: "rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.05) 0px 9px 24px",
-        "dark-card":
-          "rgba(240, 240, 240, 0.05) 0px 0px 0px 1px, rgba(240, 240, 240, 0.1) 0px 3px 6px, rgba(240, 240, 240, 0.05) 0px 9px 24px",
+        "dark-card": "rgba(240, 240, 240, 0.05) 0px 0px 0px 1px, rgba(240, 240, 240, 0.1) 0px 3px 6px, rgba(240, 240, 240, 0.05) 0px 9px 24px",
       },
       colors: {
         gray: {
@@ -57,6 +56,20 @@ const config: Config = {
           a10: "var(--black-a10)",
           a11: "var(--black-a11)",
           a12: "var(--black-a12)",
+        },
+        blue: {
+          1: "var(--blue-1)",
+          2: "var(--blue-2)",
+          3: "var(--blue-3)",
+          4: "var(--blue-4)",
+          5: "var(--blue-5)",
+          6: "var(--blue-6)",
+          7: "var(--blue-7)",
+          8: "var(--blue-8)",
+          9: "var(--blue-9)",
+          10: "var(--blue-10)",
+          11: "var(--blue-11)",
+          12: "var(--blue-12)",
         },
         white: {
           a1: "var(--white-a1)",

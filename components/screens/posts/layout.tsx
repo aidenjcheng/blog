@@ -10,11 +10,7 @@ interface LayoutWrapperProps {
   post: Post;
 }
 
-export default async function LayoutWrapper({
-  children,
-  route,
-  post,
-}: LayoutWrapperProps) {
+export default async function LayoutWrapper({ children, route, post }: LayoutWrapperProps) {
   // Fetch posts
   const posts = await getPosts(route);
 
@@ -25,5 +21,5 @@ export default async function LayoutWrapper({
     route,
   });
 
-  return <div className="max-w-[700px] mx-auto px-6">{enhancedChildren}</div>;
+  return <div className="mx-auto max-w-[700px] px-6">{enhancedChildren}</div>;
 }

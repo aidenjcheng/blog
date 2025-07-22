@@ -15,6 +15,8 @@ import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 
+import { earlyFollowers } from "./app/(posts)/wall/data";
+
 const components: MDXComponents = {
   PreviewExample: () => {
     return (
@@ -26,6 +28,22 @@ const components: MDXComponents = {
             </div>
           </div>
         </div>
+      </div>
+    );
+  },
+  WallOfNames: () => {
+    return (
+      <div className="w-full flex flex-col gap-1 ">
+        {earlyFollowers.reverse().map((name, index) => (
+          <a
+            key={name}
+            href={`https://instagram.com/${name}`}
+            target="_blank"
+            className="border-b border-border py-3"
+          >
+            {name} {index == 0 && "❤️"}
+          </a>
+        ))}
       </div>
     );
   },

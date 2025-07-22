@@ -36,8 +36,8 @@ export const AppThemeSwitcher = () => {
           key={label}
           onClick={() => setTheme(label)}
           className={cn(
-            "transition-all flex h-6 w-6 items-center justify-center rounded-[4px] hover:opacity-50",
-            active ? "bg-background text-foreground 5" : "",
+            "flex h-6 w-6 items-center justify-center rounded-[4px] transition-all hover:opacity-50",
+            active ? "5 bg-background text-foreground" : "",
           )}
         >
           {icon}
@@ -53,12 +53,7 @@ export const AppThemeProvider = ({
   children: React.ReactNode;
 }) => {
   return (
-    <ThemeProvider
-      enableSystem={true}
-      attribute="class"
-      storageKey="theme"
-      defaultTheme="system"
-    >
+    <ThemeProvider enableSystem={true} attribute="class" storageKey="theme" defaultTheme="system">
       {children}
     </ThemeProvider>
   );

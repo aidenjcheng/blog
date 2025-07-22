@@ -2,14 +2,7 @@ import { cn } from "@/lib/cn";
 
 export default function Logo({ className }: { className?: string }) {
   return (
-    <svg
-      width="200"
-      height="200"
-      viewBox="0 0 200 200"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={cn(className)}
-    >
+    <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className={cn(className)}>
       <g clip-path="url(#clip0_8_107)">
         <path
           d="M142.262 9.36958L139.483 72.354L199.62 91.285L143.684 120.371L157.358 181.916L104.201 148.017L57.7383 190.631L60.5172 127.646L0.380693 108.716L56.3161 79.6302L42.6425 18.0852L95.7992 51.9838L142.262 9.36958Z"
@@ -27,22 +20,8 @@ export default function Logo({ className }: { className?: string }) {
 
 export function TrajectionIcon({ className }: { className?: string }) {
   return (
-    <svg
-      width="200"
-      height="201"
-      viewBox="0 0 200 201"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={cn(className)}
-    >
-      <mask
-        id="mask0_11_108"
-        maskUnits="userSpaceOnUse"
-        x="0"
-        y="0"
-        width="200"
-        height="201"
-      >
+    <svg width="200" height="201" viewBox="0 0 200 201" fill="none" xmlns="http://www.w3.org/2000/svg" className={cn(className)}>
+      <mask id="mask0_11_108" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="201">
         <path d="M200 0.843262H0V200.843H200V0.843262Z" fill="white" />
       </mask>
       <g mask="url(#mask0_11_108)">
@@ -57,96 +36,17 @@ export function TrajectionIcon({ className }: { className?: string }) {
 
 export function VocaboIcon({ className }: { className?: string }) {
   return (
-    <svg
-      width="400"
-      height="403"
-      viewBox="0 0 400 403"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={cn(className)}
-    >
+    <svg width="400" height="403" viewBox="0 0 400 403" fill="none" xmlns="http://www.w3.org/2000/svg" className={cn(className)}>
       <g clip-path="url(#clip0_413_789)">
-        <rect
-          x="156.024"
-          y="157.229"
-          width="87.9518"
-          height="87.9518"
-          fill="currentColor"
-          stroke="currentColor"
-          stroke-width="1.20482"
-        />
-        <rect
-          x="89.7591"
-          y="0.60241"
-          width="87.9518"
-          height="87.9518"
-          fill="currentColor"
-          stroke="currentColor"
-          stroke-width="1.20482"
-        />
-        <rect
-          x="0.60241"
-          y="89.759"
-          width="87.9518"
-          height="87.9518"
-          fill="currentColor"
-          stroke="currentColor"
-          stroke-width="1.20482"
-        />
-        <rect
-          x="311.446"
-          y="89.759"
-          width="87.9518"
-          height="87.9518"
-          fill="currentColor"
-          stroke="currentColor"
-          stroke-width="1.20482"
-        />
-        <rect
-          x="311.446"
-          y="224.699"
-          width="87.9518"
-          height="87.9518"
-          fill="currentColor"
-          stroke="currentColor"
-          stroke-width="1.20482"
-        />
-        <rect
-          x="222.289"
-          y="313.855"
-          width="87.9518"
-          height="87.9518"
-          fill="currentColor"
-          stroke="currentColor"
-          stroke-width="1.20482"
-        />
-        <rect
-          x="89.7591"
-          y="313.855"
-          width="87.9518"
-          height="87.9518"
-          fill="currentColor"
-          stroke="currentColor"
-          stroke-width="1.20482"
-        />
-        <rect
-          x="0.60241"
-          y="224.699"
-          width="87.9518"
-          height="87.9518"
-          fill="currentColor"
-          stroke="currentColor"
-          stroke-width="1.20482"
-        />
-        <rect
-          x="222.289"
-          y="0.60241"
-          width="87.9518"
-          height="87.9518"
-          fill="currentColor"
-          stroke="white"
-          stroke-width="1.20482"
-        />
+        <rect x="156.024" y="157.229" width="87.9518" height="87.9518" fill="currentColor" stroke="currentColor" stroke-width="1.20482" />
+        <rect x="89.7591" y="0.60241" width="87.9518" height="87.9518" fill="currentColor" stroke="currentColor" stroke-width="1.20482" />
+        <rect x="0.60241" y="89.759" width="87.9518" height="87.9518" fill="currentColor" stroke="currentColor" stroke-width="1.20482" />
+        <rect x="311.446" y="89.759" width="87.9518" height="87.9518" fill="currentColor" stroke="currentColor" stroke-width="1.20482" />
+        <rect x="311.446" y="224.699" width="87.9518" height="87.9518" fill="currentColor" stroke="currentColor" stroke-width="1.20482" />
+        <rect x="222.289" y="313.855" width="87.9518" height="87.9518" fill="currentColor" stroke="currentColor" stroke-width="1.20482" />
+        <rect x="89.7591" y="313.855" width="87.9518" height="87.9518" fill="currentColor" stroke="currentColor" stroke-width="1.20482" />
+        <rect x="0.60241" y="224.699" width="87.9518" height="87.9518" fill="currentColor" stroke="currentColor" stroke-width="1.20482" />
+        <rect x="222.289" y="0.60241" width="87.9518" height="87.9518" fill="currentColor" stroke="white" stroke-width="1.20482" />
       </g>
       <defs>
         <clipPath id="clip0_413_789">

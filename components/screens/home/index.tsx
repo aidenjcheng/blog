@@ -1,9 +1,8 @@
+import { Category } from "@/components/category";
 import { Footer } from "@/components/footer";
-import Logo, { TrajectionIcon, VocaboIcon } from "@/components/logo/logo";
+import { TrajectionIcon, VocaboIcon } from "@/components/logo/logo";
 import { Posts } from "@/components/posts";
 import { PreviewLink } from "@/components/previewlink/preview-link";
-
-import * as React from "react";
 
 const Spacer = () => <div style={{ marginTop: "24px" }} />;
 
@@ -11,12 +10,16 @@ export default function Home() {
   return (
     <>
       <div className="flex justify-between">
-        <div className="text-lg">
-          <Logo className="w-12 h-12" />
-          <h1>hi</h1>
-          <p className="text-muted mt-5">
+        <div className=" text-base">
+          {/* <Logo className="w-12 h-12" /> */}
+          <h1 className="text-base">Aiden Cheng</h1>
+          <p className="text-base text-gray-8">Last updated July 20th, 2025</p>
+
+          <p className=" mt-5">
             i'm aiden cheng, a high school student in{" "}
-            <PreviewLink component={<img src="./assets/imgs/md.png" />}>
+            <PreviewLink
+              component={<img src="./assets/imgs/md.png" alt="maryland map" />}
+            >
               maryland
             </PreviewLink>
             . for over 3 years, i've developed a passion for blending aesthetic
@@ -24,13 +27,15 @@ export default function Home() {
             honed my skills in creating interfaces that are not only visually
             appealing but also user-friendly.
           </p>
-          <p className="text-muted">
+          <p className="">
             i spent my formative years founding various projects, including{" "}
             <PreviewLink
               href="https://trajection.vercel.app"
-              component={<img src="./assets/imgs/trajection.png" />}
+              component={
+                <img src="./assets/imgs/trajection.png" alt="trajection logo" />
+              }
               icon={
-                <TrajectionIcon className="w-7 border rounded-md p-1.5 h-7 dark:border-border bg-white-a1 dark:text-foreground" />
+                <TrajectionIcon className="h-7 w-7 rounded-md border bg-white-a1 p-1.5 dark:border-border dark:text-foreground" />
               }
             >
               trajection
@@ -38,27 +43,29 @@ export default function Home() {
             — a college essay consultant that grades your essays and provides
             feedback.
           </p>
-          <p className="text-muted">
+          <p className="">
             i'm also working on{" "}
-            <a className="inline-flex items-center gap-1 text-foreground">
+            <span className="inline-flex items-center gap-1 text-foreground">
               vocabo
-              <VocaboIcon className="w-7 border rounded-md p-1.5 h-7 dark:border-border bg-white-a1" />
-            </a>
+              <VocaboIcon className="h-7 w-7 rounded-md border bg-white-a1 p-1.5 dark:border-border" />
+            </span>
             —a learning platform for students to expand their vocabulary, which
             i plan to release this summer.
           </p>
-          <p className="text-muted">
+          <p className="">
             i'm also in the works of creating{" "}
-            <a className="text-foreground">codelings </a>
+            <span className="text-foreground">codelings </span>
             —a non-profit organization that teaches middle school students web
             development with real world applications.
           </p>
         </div>
       </div>
       <Spacer />
-      <Posts category="guides" />
-      <Posts category="thoughts" />
-      <Spacer />
+      <Posts category="wall" />
+      <Category category="projects" />
+      <Category category="thoughts" />
+
+      {/* <Spacer /> */}
       <Footer />
     </>
   );

@@ -9,7 +9,7 @@ export const size = {
 export const contentType = "image/png";
 
 export default function Icon() {
-  return new ImageResponse(<Logo className="text-foreground w-full h-full" />, {
+  return new ImageResponse(<Logo className="h-full w-full text-foreground" />, {
     ...size,
   });
 }

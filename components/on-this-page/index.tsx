@@ -1,10 +1,12 @@
 "use client";
 
+import type { MotionValue } from "framer-motion";
+
 import { cn } from "@/lib/cn";
 
 import { Collapsible } from "@base-ui-components/react/collapsible";
 import { MeshGradient } from "@paper-design/shaders-react";
-import { motion, MotionValue, useScroll } from "framer-motion";
+import { motion, useScroll } from "framer-motion";
 import React, { useCallback, useEffect, useState } from "react";
 
 import "./collapsible.css";
@@ -103,10 +105,11 @@ export const TableOfContents = ({
       <Collapsible.Root
         open={open}
         onOpenChange={setOpen}
+        disabled={headings.length === 0}
         className={cn(
           "bottom-10 left-1/2",
-          "flex flex-col items-center -translate-x-1/2",
-          "fixed mt-0 lg:max-w-1/2  sm:max-w-lg justify-start transition-all py-2  px-4 rounded-[1.75rem] bg-[#202020] dark:shadow-none shadow-card",
+          "-translate-x-1/2 flex flex-col items-center",
+          "fixed mt-0 justify-start rounded-[1.75rem] bg-[#202020] px-4 py-2 shadow-card transition-all sm:max-w-lg lg:max-w-1/2 dark:shadow-none",
         )}
       >
         <Collapsible.Trigger className="">
@@ -121,18 +124,21 @@ export const TableOfContents = ({
             />
             <div>{title}</div>
             {/* Progress indicator */}
-            <ProgressIndicator scrollYProgress={scrollYProgress} />
+            <ProgressIndicator
+              scrollYProgress={scrollYProgress}
+              className={cn(headings.length == 0 && "hidden")}
+            />
           </div>
         </Collapsible.Trigger>
-        <Collapsible.Panel className={"w-full transition-all panel"}>
-          <div className="flex flex-col gap-0 w-full  py-4">
+        <Collapsible.Panel className={"panel w-full transition-all"}>
+          <div className="flex w-full flex-col gap-0 py-4">
             {headings.map((heading) => (
-              <div key={heading.id} className="w-full h-fit">
+              <div key={heading.id} className="h-fit w-full">
                 <button
                   type="button"
                   onClick={() => scroll(heading.id)}
                   className={cn({
-                    "mt-0 py-1 text-left text-muted opacity-100 transition ease-in-out hover:text-white-a9 w-full":
+                    "mt-0 w-full py-1 text-left text-muted opacity-100 transition ease-in-out hover:text-white-a9":
                       true,
                     "text-bold text-white-a12": visibleHeadings.has(heading.id),
                     // "": heading.level === "h1",
@@ -156,8 +162,10 @@ export const TableOfContents = ({
 
 const ProgressIndicator = ({
   scrollYProgress,
+  className,
 }: {
   scrollYProgress: MotionValue;
+  className?: string;
 }) => {
   const progressIcon: React.CSSProperties = {
     transform: "rotate(-90deg)",
@@ -170,9 +178,14 @@ const ProgressIndicator = ({
   };
 
   return (
-    <svg className="size-8" style={progressIcon} viewBox="0 0 100 100">
+    <svg
+      className="size-8"
+      style={progressIcon}
+      viewBox="0 0 100 100"
+      className={className}
+    >
       <circle
-        className="opacity-20 stroke-current fill-none"
+        className="fill-none stroke-current opacity-20"
         cx="50"
         cy="50"
         r="25"

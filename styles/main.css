@@ -1,16 +1,10 @@
 @import url("@radix-ui/colors/gray.css");
 @import url("@radix-ui/colors/gray-alpha.css");
-@import url("@radix-ui/colors/gray-dark.css");
-@import url("@radix-ui/colors/gray-dark-alpha.css");
 @import url("@radix-ui/colors/pink.css");
 @import url("@radix-ui/colors/pink-alpha.css");
-@import url("@radix-ui/colors/pink-dark.css");
-@import url("@radix-ui/colors/pink-dark-alpha.css");
 @import url("@radix-ui/colors/yellow.css");
 @import url("@radix-ui/colors/blue.css");
 @import url("@radix-ui/colors/yellow-alpha.css");
-@import url("@radix-ui/colors/yellow-dark.css");
-@import url("@radix-ui/colors/yellow-dark-alpha.css");
 @import url("@radix-ui/colors/black-alpha.css");
 @import url("@radix-ui/colors/white-alpha.css");
 
@@ -71,14 +65,14 @@
   html {
     @apply text-default text-foreground bg-background;
 
-    h1,
+    /* h1,
     h2,
     h3,
     h4,
     h5,
     h6 {
       @apply font-medium;
-    }
+    } */
 
     h1 {
       @apply text-[16px];
@@ -133,8 +127,22 @@
   }
 
   article {
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-weight: 400;
+    }
+
     h1 + h2 {
       margin-top: 4px !important;
+    }
+
+    p {
+      @apply text-black-a12;
     }
 
     h1 + p,

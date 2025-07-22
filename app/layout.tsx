@@ -28,7 +28,7 @@ export default function RootLayout({
       <Analytics />
       <body>
         <Providers>
-          <main className="mx-auto max-w-xl overflow-x-hidden px-6 py-24 md:overflow-x-visible min-h-screen pb-[240px]">
+          <main className="mx-auto min-h-screen max-w-2xl overflow-x-hidden px-6 py-24 pb-[240px] md:overflow-x-visible">
             <article className="article isolate">{children}</article>
           </main>
         </Providers>
