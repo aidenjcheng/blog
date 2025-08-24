@@ -179,10 +179,9 @@ const ProgressIndicator = ({
 
   return (
     <svg
-      className="size-8"
+      className={cn("size-8", className)}
       style={progressIcon}
       viewBox="0 0 100 100"
-      className={className}
     >
       <circle
         className="fill-none stroke-current opacity-20"
