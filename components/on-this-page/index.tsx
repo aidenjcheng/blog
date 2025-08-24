@@ -18,13 +18,9 @@ export const TableOfContents = ({
   title: string;
   // scrollY: MotionValue;
 }) => {
-  const [headings, setHeadings] = useState<
-    { id: string; text: string; level: string }[]
-  >([]);
+  const [headings, setHeadings] = useState<{ id: string; text: string; level: string }[]>([]);
   const [open, setOpen] = useState(false);
-  const [visibleHeadings, setVisibleHeadings] = useState<Set<string>>(
-    new Set(),
-  );
+  const [visibleHeadings, setVisibleHeadings] = useState<Set<string>>(new Set());
   const { scrollYProgress } = useScroll();
 
   const getHeadings = useCallback(() => {
@@ -63,10 +59,7 @@ export const TableOfContents = ({
       setVisibleHeadings(new Set(visibleSet));
     };
 
-    const observer = new IntersectionObserver(
-      handleIntersection,
-      observerOptions,
-    );
+    const observer = new IntersectionObserver(handleIntersection, observerOptions);
 
     for (const heading of collectedHeadings) {
       const element = document.getElementById(heading.id);
@@ -124,10 +117,7 @@ export const TableOfContents = ({
             />
             <div>{title}</div>
             {/* Progress indicator */}
-            <ProgressIndicator
-              scrollYProgress={scrollYProgress}
-              className={cn(headings.length == 0 && "hidden")}
-            />
+            <ProgressIndicator scrollYProgress={scrollYProgress} className={cn(headings.length === 0 && "hidden")} />
           </div>
         </Collapsible.Trigger>
         <Collapsible.Panel className={"panel w-full transition-all"}>
@@ -138,16 +128,13 @@ export const TableOfContents = ({
                   type="button"
                   onClick={() => scroll(heading.id)}
                   className={cn({
-                    "mt-0 w-full py-1 text-left text-muted opacity-100 transition ease-in-out hover:text-white-a9":
-                      true,
+                    "mt-0 w-full py-1 text-left text-muted opacity-100 transition ease-in-out hover:text-white-a9": true,
                     "text-bold text-white-a12": visibleHeadings.has(heading.id),
                     // "": heading.level === "h1",
                     // "pl-2": heading.level === "h2",
                     // "pl-4": heading.level === "h3",
                   })}
-                  data-active={
-                    visibleHeadings.has(heading.id) ? "true" : "false"
-                  }
+                  data-active={visibleHeadings.has(heading.id) ? "true" : "false"}
                 >
                   {heading.text}
                 </button>
@@ -178,19 +165,8 @@ const ProgressIndicator = ({
   };
 
   return (
-    <svg
-      className={cn("size-8", className)}
-      style={progressIcon}
-      viewBox="0 0 100 100"
-    >
-      <circle
-        className="fill-none stroke-current opacity-20"
-        cx="50"
-        cy="50"
-        r="25"
-        strokeWidth={10}
-        pathLength="1"
-      />
+    <svg className={cn("size-8", className)} style={progressIcon} viewBox="0 0 100 100">
+      <circle className="fill-none stroke-current opacity-20" cx="50" cy="50" r="25" strokeWidth={10} pathLength="1" />
       <motion.circle
         cx="50"
         cy="50"
