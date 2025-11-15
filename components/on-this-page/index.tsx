@@ -18,10 +18,14 @@ export const TableOfContents = ({
   title: string;
   // scrollY: MotionValue;
 }) => {
-  const [headings, setHeadings] = useState<{ id: string; text: string; level: string }[]>([]);
-  const [open, setOpen] = useState(false);
-  const [visibleHeadings, setVisibleHeadings] = useState<Set<string>>(new Set());
-  const { scrollYProgress } = useScroll();
+  const [headings, setHeadings] = useState<
+    { id: string; text: string; level: string }[]
+  >([]);
+  const [open, setOpen] = useState<boolean>(false);
+  const [visibleHeadings, setVisibleHeadings] = useState<Set<string>>(
+    new Set(),
+  );
+  // const { scrollYProgress } = useScroll();
 
   const getHeadings = useCallback(() => {
     return Array.from(document.querySelectorAll("h1, h2, h3"))
@@ -59,7 +63,10 @@ export const TableOfContents = ({
       setVisibleHeadings(new Set(visibleSet));
     };
 
-    const observer = new IntersectionObserver(handleIntersection, observerOptions);
+    const observer = new IntersectionObserver(
+      handleIntersection,
+      observerOptions,
+    );
 
     for (const heading of collectedHeadings) {
       const element = document.getElementById(heading.id);
@@ -93,56 +100,74 @@ export const TableOfContents = ({
     }
   };
 
+  const lastVisibleHeadingId = Array.from(visibleHeadings).pop();
+
   return (
     <React.Fragment>
-      <Collapsible.Root
-        open={open}
-        onOpenChange={setOpen}
-        disabled={headings.length === 0}
+      {/*<div className="group">*/}
+      <div
         className={cn(
-          "bottom-10 left-1/2",
-          "-translate-x-1/2 flex flex-col items-center",
-          "fixed mt-0 justify-start rounded-[1.75rem] bg-[#202020] px-4 py-2 shadow-card transition-all sm:max-w-lg lg:max-w-1/2 dark:shadow-none",
+          "top-1/2 -translate-y-1/2  pl-3 left-0 fixed py-10",
+          "flex flex-col justify-start items-start",
+          "scale-[0.8] opacity-100 data-[is-open=true]:opacity-0 data-[is-open=true]:scale-100 transition-all duration-200 ease-in-out origin-left",
         )}
+        onMouseOver={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+        data-is-open={open}
       >
-        <Collapsible.Trigger className="">
-          <div className="flex items-center gap-2 text-white-a11 ">
-            <MeshGradient
-              color1="#FFC0CB" // pink
-              color2="#FFFF00" // yellow
-              color3="#0000FF" // blue
-              color4="#800080" // purple
-              speed={0.25}
-              className="size-6 rounded-full"
-            />
-            <div>{title}</div>
-            {/* Progress indicator */}
-            <ProgressIndicator scrollYProgress={scrollYProgress} className={cn(headings.length === 0 && "hidden")} />
-          </div>
-        </Collapsible.Trigger>
-        <Collapsible.Panel className={"panel w-full transition-all"}>
-          <div className="flex w-full flex-col gap-0 py-4">
-            {headings.map((heading) => (
-              <div key={heading.id} className="h-fit w-full">
-                <button
-                  type="button"
-                  onClick={() => scroll(heading.id)}
-                  className={cn({
-                    "mt-0 w-full py-1 text-left text-muted opacity-100 transition ease-in-out hover:text-white-a9": true,
-                    "text-bold text-white-a12": visibleHeadings.has(heading.id),
-                    // "": heading.level === "h1",
-                    // "pl-2": heading.level === "h2",
-                    // "pl-4": heading.level === "h3",
-                  })}
-                  data-active={visibleHeadings.has(heading.id) ? "true" : "false"}
-                >
-                  {heading.text}
-                </button>
-              </div>
-            ))}
-          </div>
-        </Collapsible.Panel>
-      </Collapsible.Root>
+        {headings.map((heading, i) => (
+          <div
+            className={cn(
+              "h-[1.5px] w-3 bg-gray-a7 rounded-full my-2 transition-all duration-100 ease-in-out",
+              heading.id === lastVisibleHeadingId && "bg-gray-a10 w-4",
+              (i == headings.length - 1 || i == 0) && "!w-5",
+            )}
+          />
+        ))}
+      </div>
+      <div
+        className={cn(
+          "top-1/2 -translate-y-1/2 left-3",
+          " flex flex-col items-center",
+          "fixed mt-0 justify-start px-3 shadow-card transition-all sm:max-w-52 lg:max-w-1/2 dark:shadow-none bg-background rounded-lg py-2",
+          "scale-50 opacity-0 data-[is-open=true]:opacity-100 data-[is-open=true]:scale-100 transition-all duration-200 ease-in-out origin-left pointer-events-none data-[is-open=true]:pointer-events-auto data-[is-open=true]:translate-x-4 translate-x-0",
+        )}
+        onMouseOver={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+        data-is-open={open}
+      >
+        {/*<div className="panel w-full transition-all">*/}
+        <div className="flex w-full flex-col gap-0 text-sm">
+          {/*<button className="truncate">{title}</button>*/}
+
+          {headings.map((heading, i) => (
+            <div
+              key={heading.id}
+              className="h-fit truncate max-w-full font-medium"
+            >
+              <button
+                type="button"
+                onClick={() => scroll(heading.id)}
+                className={cn(
+                  "text-left truncate max-w-full",
+                  i != 0 &&
+                    "mt-0 w-full py-1  text-muted opacity-100 transition ease-in-out duration-200 hover:text-foreground ml-3",
+                  // :
+                  //   true,
+                  // "text-bold": heading.id === lastVisibleHeadingId,
+                  // "": heading.level === "h1",
+                  // "pl-2": heading.level === "h2",
+                  // "pl-4": heading.level === "h3",
+                )}
+                // data-active={heading.id === lastVisibleHeadingId ? true : false}
+              >
+                {heading.text}
+              </button>
+            </div>
+          ))}
+        </div>
+        {/*</div>*/}
+      </div>
     </React.Fragment>
   );
 };
@@ -165,8 +190,19 @@ const ProgressIndicator = ({
   };
 
   return (
-    <svg className={cn("size-8", className)} style={progressIcon} viewBox="0 0 100 100">
-      <circle className="fill-none stroke-current opacity-20" cx="50" cy="50" r="25" strokeWidth={10} pathLength="1" />
+    <svg
+      className={cn("size-8", className)}
+      style={progressIcon}
+      viewBox="0 0 100 100"
+    >
+      <circle
+        className="fill-none stroke-current opacity-20"
+        cx="50"
+        cy="50"
+        r="25"
+        strokeWidth={10}
+        pathLength="1"
+      />
       <motion.circle
         cx="50"
         cy="50"

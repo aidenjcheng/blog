@@ -28,8 +28,11 @@ export default function RootLayout({
       <Analytics />
       <body>
         <Providers>
-          <main className="mx-auto min-h-screen max-w-2xl overflow-x-hidden px-6 py-24 pb-[240px] md:overflow-x-visible">
-            <article className="article isolate">{children}</article>
+          <main className="mx-auto min-h-screen max-w-3xl overflow-x-hidden px-6 py-24 mt-2 pb-[240px] md:overflow-x-visible">
+            <article className="article isolate">
+              <div className="overlay" />
+              {children}
+            </article>
           </main>
         </Providers>
       </body>

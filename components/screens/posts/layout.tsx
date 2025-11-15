@@ -10,7 +10,11 @@ interface LayoutWrapperProps {
   post: Post;
 }
 
-export default async function LayoutWrapper({ children, route, post }: LayoutWrapperProps) {
+export default async function LayoutWrapper({
+  children,
+  route,
+  post,
+}: LayoutWrapperProps) {
   // Fetch posts
   const posts = await getPosts(route);
 
