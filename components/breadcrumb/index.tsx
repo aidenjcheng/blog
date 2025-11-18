@@ -13,16 +13,10 @@ export const Breadcrumb = () => {
   const paths = pathname
     .split("/")
     .filter((path) => path !== "")
-    .map((path) =>
-      path.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase()),
-    );
+    .map((path) => path.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase()));
 
   return (
-    <div
-      className={cn(
-        "mt-0 mb-4 flex w-full items-center gap-1 align-middle font-normal text-sm",
-      )}
-    >
+    <div className={cn("mt-0 mb-4 flex w-full items-center gap-1 align-middle font-normal text-sm")}>
       <Link className="text-muted" href="/">
         Home
       </Link>
@@ -44,9 +38,7 @@ export const Breadcrumb = () => {
                 {path}
               </Link>
             )}
-            {index < paths.length - 1 && (
-              <ChevronRight className="size-4 text-muted" />
-            )}
+            {index < paths.length - 1 && <ChevronRight className="size-4 text-muted" />}
           </React.Fragment>
         );
       })}

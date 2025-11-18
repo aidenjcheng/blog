@@ -4,9 +4,7 @@ import type { MotionValue } from "framer-motion";
 
 import { cn } from "@/lib/cn";
 
-import { Collapsible } from "@base-ui-components/react/collapsible";
-import { MeshGradient } from "@paper-design/shaders-react";
-import { motion, useScroll } from "framer-motion";
+import { motion } from "framer-motion";
 import React, { useCallback, useEffect, useState } from "react";
 
 import "./collapsible.css";
@@ -18,13 +16,9 @@ export const TableOfContents = ({
   title: string;
   // scrollY: MotionValue;
 }) => {
-  const [headings, setHeadings] = useState<
-    { id: string; text: string; level: string }[]
-  >([]);
+  const [headings, setHeadings] = useState<{ id: string; text: string; level: string }[]>([]);
   const [open, setOpen] = useState<boolean>(false);
-  const [visibleHeadings, setVisibleHeadings] = useState<Set<string>>(
-    new Set(),
-  );
+  const [visibleHeadings, setVisibleHeadings] = useState<Set<string>>(new Set());
   // const { scrollYProgress } = useScroll();
 
   const getHeadings = useCallback(() => {
@@ -63,10 +57,7 @@ export const TableOfContents = ({
       setVisibleHeadings(new Set(visibleSet));
     };
 
-    const observer = new IntersectionObserver(
-      handleIntersection,
-      observerOptions,
-    );
+    const observer = new IntersectionObserver(handleIntersection, observerOptions);
 
     for (const heading of collectedHeadings) {
       const element = document.getElementById(heading.id);
@@ -107,33 +98,38 @@ export const TableOfContents = ({
       {/*<div className="group">*/}
       <div
         className={cn(
-          "top-1/2 -translate-y-1/2  pl-3 left-0 fixed py-10",
-          "flex flex-col justify-start items-start",
-          "scale-[0.8] opacity-100 data-[is-open=true]:opacity-0 data-[is-open=true]:scale-100 transition-all duration-200 ease-in-out origin-left",
+          "-translate-y-1/2 fixed top-1/2 left-0 py-10 pl-3",
+          "flex flex-col items-start justify-start",
+          "origin-left scale-[0.8] opacity-100 transition-all duration-200 ease-in-out data-[is-open=true]:scale-100 data-[is-open=true]:opacity-0",
         )}
         onMouseOver={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
         data-is-open={open}
       >
         {headings.map((heading, i) => (
           <div
+            key={heading.id}
             className={cn(
-              "h-[1.5px] w-3 bg-gray-a7 rounded-full my-2 transition-all duration-100 ease-in-out",
-              heading.id === lastVisibleHeadingId && "bg-gray-a10 w-4",
-              (i == headings.length - 1 || i == 0) && "!w-5",
+              "my-2 h-[1.5px] w-3 rounded-full bg-gray-a7 transition-all duration-100 ease-in-out",
+              heading.id === lastVisibleHeadingId && "w-4 bg-gray-a10",
+              (i === headings.length - 1 || i === 0) && "!w-5",
             )}
           />
         ))}
       </div>
       <div
         className={cn(
-          "top-1/2 -translate-y-1/2 left-3",
+          "-translate-y-1/2 top-1/2 left-3",
           " flex flex-col items-center",
-          "fixed mt-0 justify-start px-3 shadow-card transition-all sm:max-w-52 lg:max-w-1/2 dark:shadow-none bg-background rounded-lg py-2",
-          "scale-50 opacity-0 data-[is-open=true]:opacity-100 data-[is-open=true]:scale-100 transition-all duration-200 ease-in-out origin-left pointer-events-none data-[is-open=true]:pointer-events-auto data-[is-open=true]:translate-x-4 translate-x-0",
+          "fixed mt-0 justify-start rounded-lg bg-background px-3 py-2 shadow-card transition-all sm:max-w-52 lg:max-w-1/2 dark:shadow-none",
+          "pointer-events-none origin-left translate-x-0 scale-50 opacity-0 transition-all duration-200 ease-in-out data-[is-open=true]:pointer-events-auto data-[is-open=true]:translate-x-4 data-[is-open=true]:scale-100 data-[is-open=true]:opacity-100",
         )}
         onMouseOver={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
         data-is-open={open}
       >
         {/*<div className="panel w-full transition-all">*/}
@@ -141,17 +137,13 @@ export const TableOfContents = ({
           {/*<button className="truncate">{title}</button>*/}
 
           {headings.map((heading, i) => (
-            <div
-              key={heading.id}
-              className="h-fit truncate max-w-full font-medium"
-            >
+            <div key={heading.id} className="h-fit max-w-full truncate font-medium">
               <button
                 type="button"
                 onClick={() => scroll(heading.id)}
                 className={cn(
-                  "text-left truncate max-w-full",
-                  i != 0 &&
-                    "mt-0 w-full py-1  text-muted opacity-100 transition ease-in-out duration-200 hover:text-foreground ml-3",
+                  "max-w-full truncate text-left",
+                  i !== 0 && "mt-0 ml-3 w-full py-1 text-muted opacity-100 transition duration-200 ease-in-out hover:text-foreground",
                   // :
                   //   true,
                   // "text-bold": heading.id === lastVisibleHeadingId,
@@ -190,19 +182,8 @@ const ProgressIndicator = ({
   };
 
   return (
-    <svg
-      className={cn("size-8", className)}
-      style={progressIcon}
-      viewBox="0 0 100 100"
-    >
-      <circle
-        className="fill-none stroke-current opacity-20"
-        cx="50"
-        cy="50"
-        r="25"
-        strokeWidth={10}
-        pathLength="1"
-      />
+    <svg className={cn("size-8", className)} style={progressIcon} viewBox="0 0 100 100">
+      <circle className="fill-none stroke-current opacity-20" cx="50" cy="50" r="25" strokeWidth={10} pathLength="1" />
       <motion.circle
         cx="50"
         cy="50"

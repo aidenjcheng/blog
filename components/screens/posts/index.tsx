@@ -34,11 +34,11 @@ export const Layout = ({ post, route }: Props) => {
 
   return (
     <React.Fragment>
-      <div className="flex flex-col mt-10">
+      <div className="mt-10 flex flex-col">
         <div>
           <h1 id="title">{post.title}</h1>
         </div>
-        <div className="mt-1 flex gap-2 text-muted mb-2">
+        <div className="mt-1 mb-2 flex gap-2 text-muted">
           <PublishedTime />
           <Seperator />
           <UpdateTime />

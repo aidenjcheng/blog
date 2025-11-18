@@ -12,10 +12,7 @@ export default function Home() {
           <h1 className="text-base">Aiden Cheng</h1>
           <p className="text-base text-muted">Last updated July 20th, 2025</p>
 
-          <p className=" mt-5">
-            Hi, I'm a high school student on the east coast. I like to code and
-            design things
-          </p>
+          <p className=" mt-5">Hi, I'm a high school student on the east coast. I like to code and design things</p>
         </div>
       </div>
       <div>
