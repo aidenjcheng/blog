@@ -4,7 +4,7 @@ import type { ImageProps } from "next/image";
 
 import * as Dialog from "@radix-ui/react-dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { AnimatePresence, MotionConfig, motion } from "framer-motion";
+import { AnimatePresence, motion, MotionConfig } from "framer-motion";
 import { X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
@@ -18,7 +18,12 @@ interface MDXImageProps extends Omit<ImageProps, "src"> {
   caption?: string;
 }
 
-export default function MDXImage({ caption, alt, src, ...props }: MDXImageProps) {
+export default function MDXImage({
+  caption,
+  alt,
+  src,
+  ...props
+}: MDXImageProps) {
   const [isOpen, setIsOpen] = useState(false);
   const uniqueId = src.replace(/[^a-zA-Z0-9]/g, "");
 
@@ -40,8 +45,19 @@ export default function MDXImage({ caption, alt, src, ...props }: MDXImageProps)
               className="relative w-full cursor-pointer overflow-hidden rounded-lg border border-border"
               whileHover={{ scale: 0.975, opacity: 0.9 }}
             >
-              <MotionImage layoutId={`image-preview${uniqueId}`} className="h-auto w-full overflow-hidden rounded-lg">
-                <Image src={src} alt={alt} width={1000} height={1000} sizes="100vw" className="h-auto w-full object-contain" {...props} />
+              <MotionImage
+                layoutId={`image-preview${uniqueId}`}
+                className="h-auto w-full overflow-hidden rounded-lg"
+              >
+                <Image
+                  src={src}
+                  alt={alt}
+                  width={1000}
+                  height={1000}
+                  sizes="100vw"
+                  className="h-auto w-full object-contain"
+                  {...props}
+                />
               </MotionImage>
             </motion.div>
           </Dialog.Trigger>
@@ -49,9 +65,9 @@ export default function MDXImage({ caption, alt, src, ...props }: MDXImageProps)
             <AnimatePresence initial={false} mode="sync">
               {isOpen && (
                 <>
-                  <Dialog.Overlay>
+                  <Dialog.Overlay className="z-40">
                     <motion.div
-                      className="fixed inset-0 z-40 h-full w-full bg-black/50 backdrop-blur-xs"
+                      className="fixed inset-0 z-40 h-full w-full bg-black/50 backdrop-blur-sm"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
@@ -63,9 +79,23 @@ export default function MDXImage({ caption, alt, src, ...props }: MDXImageProps)
                         <Dialog.Title>Image Preview</Dialog.Title>
                         <Dialog.Description>{alt}</Dialog.Description>
                       </VisuallyHidden>
-                      <motion.div layoutId={`image-preview-dialog${uniqueId}`} className="relative w-full overflow-hidden rounded-2xl">
-                        <MotionImage layoutId={`image-preview${uniqueId}`} className="h-auto w-full select-none overflow-hidden rounded-2xl">
-                          <Image src={src} alt={alt} width={1000} height={1000} sizes="100vw" className="h-auto w-full object-contain" {...props} />
+                      <motion.div
+                        layoutId={`image-preview-dialog${uniqueId}`}
+                        className="relative w-full overflow-hidden rounded-2xl"
+                      >
+                        <MotionImage
+                          layoutId={`image-preview${uniqueId}`}
+                          className="h-auto w-full select-none overflow-hidden rounded-2xl"
+                        >
+                          <Image
+                            src={src}
+                            alt={alt}
+                            width={1000}
+                            height={1000}
+                            sizes="100vw"
+                            className="h-auto w-full object-contain"
+                            {...props}
+                          />
                         </MotionImage>
                         <Dialog.Close asChild>
                           <button
