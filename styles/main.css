@@ -36,6 +36,7 @@
     --radius-small: 4px;
     --radius-base: 8px;
     --radius-large: 12px;
+    --destructive-foreground: var(--color-red-700);
   }
 
   .overlay {
@@ -370,6 +371,10 @@
       border: 1px solid var(--border);
       border-radius: var(--radius-base);
     }
+  }
+
+  .dark {
+    --destructive-foreground: var(--color-red-400);
   }
 }
 

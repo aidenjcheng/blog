@@ -29,7 +29,7 @@ export default function RootLayout({
       <body>
         <Providers>
           <main className="mx-auto mt-2 min-h-screen max-w-3xl overflow-x-hidden px-6 py-24 pb-[240px] md:overflow-x-visible">
-            <article className="article isolate">
+            <article className="article isolate h-full">
               <div className="overlay" />
               {children}
             </article>

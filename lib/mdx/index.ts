@@ -1,16 +1,16 @@
 import type { Post } from "@/types/post";
 
-import fs from "fs";
-import path from "path";
+import { readFileSync, readdirSync } from "node:fs";
+import { basename, extname, join } from "node:path";
 
 import matter from "gray-matter";
 
 function readFile(filePath: string): Post | null {
   try {
-    const rawContent = fs.readFileSync(filePath, "utf-8");
+    const rawContent = readFileSync(filePath, "utf-8");
     const { data, content } = matter(rawContent);
 
-    const slug = path.basename(filePath, path.extname(filePath));
+    const slug = basename(filePath, extname(filePath));
 
     return {
       ...data,
@@ -25,7 +25,7 @@ function readFile(filePath: string): Post | null {
 
 function getFiles(dir: string): string[] {
   try {
-    return fs.readdirSync(dir).filter((file) => path.extname(file) === ".mdx");
+    return readdirSync(dir).filter((file) => extname(file) === ".mdx");
   } catch (error) {
     console.error(`Failed to read directory at ${dir}:`, error);
     return [];
@@ -33,6 +33,9 @@ function getFiles(dir: string): string[] {
 }
 
 export function getPosts(directory: string): Post[] {
-  const files = getFiles(path.join(process.cwd(), "app", "(posts)", directory, "posts"));
-  return files.map((file) => readFile(path.join(process.cwd(), "app", "(posts)", directory, "posts", file))).filter((post): post is Post => post !== null);
+  const postsDirectory = join(process.cwd(), "app", "(posts)", directory, "posts");
+
+  return getFiles(postsDirectory)
+    .map((file) => readFile(join(postsDirectory, file)))
+    .filter((post): post is Post => post !== null);
 }

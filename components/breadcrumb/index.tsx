@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/cn";
 
-import { ChevronRight } from "@untitled-ui/icons-react";
+import { ChevronRight } from "lucide-react";
 import { Link } from "next-view-transitions";
 import { usePathname } from "next/navigation";
 import React from "react";

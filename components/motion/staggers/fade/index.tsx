@@ -1,8 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
+import type { Variants } from "motion/react";
 
-const container = {
+import { motion } from "motion/react";
+
+const container: Variants = {
   hidden: {},
   show: {
     transition: {
@@ -12,7 +14,7 @@ const container = {
   },
 };
 
-const item = {
+const item: Variants = {
   hidden: {
     opacity: 0,
     y: 16,

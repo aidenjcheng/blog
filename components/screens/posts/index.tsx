@@ -4,10 +4,10 @@ import { TableOfContents } from "@/components/on-this-page";
 import { PostNavigation } from "@/components/post-navigation";
 import { formatter } from "@/lib/formatter";
 import { getPosts } from "@/lib/mdx";
+import { estimateReadingTime } from "@/lib/reading-time";
 import { MDX } from "@/mdx-components";
 
 import React from "react";
-import { readingTime } from "reading-time-estimator";
 
 interface Props {
   post: Post;
@@ -16,6 +16,7 @@ interface Props {
 
 export const Layout = ({ post, route }: Props) => {
   const posts = getPosts(route);
+  const readingTime = estimateReadingTime(post.content);
 
   const Seperator = () => {
     return <div>⋅</div>;
@@ -29,7 +30,7 @@ export const Layout = ({ post, route }: Props) => {
   };
 
   const ReadingTime = () => {
-    return <span>{readingTime(post.content).minutes} minutes read</span>;
+    return <span>{readingTime} minutes read</span>;
   };
 
   return (
