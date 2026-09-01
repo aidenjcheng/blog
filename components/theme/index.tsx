@@ -35,9 +35,11 @@ export const AppThemeSwitcher = () => {
           type="button"
           key={label}
           onClick={() => setTheme(label)}
+          aria-label={`Use ${label} theme`}
+          aria-pressed={active}
           className={cn(
             "flex h-6 w-6 items-center justify-center rounded-[4px] transition-all hover:opacity-50",
-            active ? "5 bg-background text-foreground" : "",
+            active ? "bg-background text-foreground" : "",
           )}
         >
           {icon}
@@ -53,7 +55,12 @@ export const AppThemeProvider = ({
   children: React.ReactNode;
 }) => {
   return (
-    <ThemeProvider enableSystem={true} attribute="class" storageKey="theme" defaultTheme="system">
+    <ThemeProvider
+      enableSystem={true}
+      attribute="class"
+      storageKey="theme"
+      defaultTheme="system"
+    >
       {children}
     </ThemeProvider>
   );

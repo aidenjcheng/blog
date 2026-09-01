@@ -1,5 +1,6 @@
 import type { Post } from "@/types";
 
+import MDXImage from "@/components/image";
 import { TableOfContents } from "@/components/on-this-page";
 import { PostNavigation } from "@/components/post-navigation";
 import { formatter } from "@/lib/formatter";
@@ -35,6 +36,12 @@ export const Layout = ({ post, route }: Props) => {
 
   return (
     <React.Fragment>
+      {route === "projects" &&
+        (post.media?.image ? (
+          <MDXImage src={post.media.image} alt={`${post.title} thumbnail`} />
+        ) : (
+          <div aria-hidden className="my-6 aspect-video rounded-base border border-border bg-gray-3" />
+        ))}
       <div className="mt-10 flex flex-col">
         <div>
           <h1 id="title">{post.title}</h1>

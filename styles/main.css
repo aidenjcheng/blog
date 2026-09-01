@@ -1,9 +1,15 @@
 @import url("@radix-ui/colors/gray.css");
+@import url("@radix-ui/colors/gray-dark.css");
 @import url("@radix-ui/colors/gray-alpha.css");
+@import url("@radix-ui/colors/gray-dark-alpha.css");
 @import url("@radix-ui/colors/pink.css");
 @import url("@radix-ui/colors/pink-alpha.css");
 @import url("@radix-ui/colors/yellow.css");
+@import url("@radix-ui/colors/yellow-dark.css");
 @import url("@radix-ui/colors/blue.css");
+@import url("@radix-ui/colors/blue-dark.css");
+@import url("@radix-ui/colors/red.css");
+@import url("@radix-ui/colors/red-dark.css");
 @import url("@radix-ui/colors/yellow-alpha.css");
 @import url("@radix-ui/colors/black-alpha.css");
 @import url("@radix-ui/colors/white-alpha.css");
@@ -37,6 +43,12 @@
     --radius-base: 8px;
     --radius-large: 12px;
     --destructive-foreground: var(--color-red-700);
+    --hover: color-mix(in srgb, var(--fg) 8%, transparent);
+    --active: rgb(0 0 0 / 0.07);
+    --selected: #d4d4d4;
+    --destructive-light: #fef2f2;
+    --overlay: 0 0 0;
+    --focus-ring: #6b97ff;
   }
 
   .overlay {
@@ -374,7 +386,53 @@
   }
 
   .dark {
-    --destructive-foreground: var(--color-red-400);
+    --bg: var(--gray-1);
+    --fg: var(--gray-12);
+    --secondary: var(--gray-12);
+    --muted: var(--gray-11);
+    --border: var(--gray-6);
+    --scrollbar-thumb: var(--gray-6);
+    --selection-background: var(--blue-6);
+    --selection-foreground: var(--blue-12);
+    --kbd-background: var(--gray-3);
+    --kbd-foreground: var(--gray-12);
+    --kbd-border: var(--gray-6);
+    --highlight-background: var(--yellow-4);
+    --highlight-foreground: var(--yellow-12);
+    --destructive-foreground: var(--red-11);
+    --hover: color-mix(in srgb, var(--fg) 8%, transparent);
+    --active: color-mix(in srgb, var(--fg) 10%, transparent);
+    --selected: var(--gray-7);
+    --destructive-light: var(--red-3);
+    --overlay: 255 255 255;
+    --focus-ring: var(--blue-8);
+  }
+
+  .dark .overlay {
+    background: linear-gradient(
+      180deg,
+      var(--bg),
+      color-mix(in srgb, var(--bg) 74%, transparent) 19%,
+      color-mix(in srgb, var(--bg) 54%, transparent) 34%,
+      color-mix(in srgb, var(--bg) 38%, transparent) 47%,
+      color-mix(in srgb, var(--bg) 19%, transparent) 65%,
+      color-mix(in srgb, var(--bg) 8%, transparent) 80.2%,
+      transparent
+    );
+  }
+  .theme {
+    --color-hover: var(--hover);
+    --color-active: var(--active);
+    --color-selected: var(--selected);
+    --color-destructive-light: var(--destructive-light);
+  }
+  :focus-visible {
+    outline: 1px solid var(--focus-ring, #6b97ff);
+    outline-offset: 2px;
+    border-radius: var(--shape-input-radius, 8px);
+  }
+  a:focus-visible {
+    border-radius: 2px;
   }
 }
 
@@ -390,4 +448,15 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+html.transitioning *,
+html.transitioning *::before,
+html.transitioning *::after {
+  transition:
+    border-radius 180ms ease-in-out,
+    background-color 180ms ease-in-out,
+    color 180ms ease-in-out,
+    border-color 180ms ease-in-out,
+    fill 180ms ease-in-out,
+    stroke 180ms ease-in-out !important;
 }

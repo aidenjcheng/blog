@@ -5,6 +5,7 @@ import type { PluggableList } from "unified";
 import FootnoteBackReference from "@/components/footnote/back-reference";
 import FootnoteForwardReference from "@/components/footnote/forward-reference";
 import MDXImage from "@/components/image";
+import MDXVideo from "@/components/video";
 import Link from "@/components/link";
 import Preview from "@/components/preview";
 import { cn } from "@/lib/cn";
@@ -44,6 +45,7 @@ const components: MDXComponents = {
   },
   Preview: ({ children, codeblock }) => <Preview codeblock={codeblock ? codeblock : undefined}>{children}</Preview>,
   Image: ({ caption, alt, ...props }) => <MDXImage {...props} caption={caption} alt={alt} />,
+  video: MDXVideo,
   h2: ({ children, id }: React.HTMLAttributes<HTMLHeadingElement>) => {
     if (id?.includes("footnote-label")) {
       return null;

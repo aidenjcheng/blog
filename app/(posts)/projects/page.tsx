@@ -1,5 +1,5 @@
 import * as FadeIn from "@/components/motion/staggers/fade";
-import { Posts } from "@/components/posts";
+import { ProjectThumbnail } from "@/components/project-thumbnail";
 import { OpenGraph } from "@/lib/og";
 
 import React from "react";
@@ -26,7 +26,7 @@ export default function Page() {
   return (
     <React.Fragment>
       <FadeIn.Item>
-        <Posts category={category} />
+        <ProjectThumbnail category={category} showHeader={false} />
       </FadeIn.Item>
     </React.Fragment>
   );
