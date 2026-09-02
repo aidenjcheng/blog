@@ -2,9 +2,14 @@ import { Breadcrumb } from "@/components/breadcrumb";
 import { ImageUpload } from "@/components/image-upload";
 
 import { Input } from "@base-ui/react/input";
+import { notFound } from "next/navigation";
 import * as React from "react";
 
 export default function Write() {
+  if (process.env.NODE_ENV === "production") {
+    notFound();
+  }
+
   return (
     <React.Fragment>
       <Breadcrumb />
