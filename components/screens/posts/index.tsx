@@ -34,17 +34,9 @@ export const Layout = ({ post, route }: Props) => {
       <ArticleScrollTop slug={post.slug} />
       {route === "projects" &&
         (post.media?.image ? (
-          <MDXImage
-            src={post.media.image}
-            alt={`${post.title} thumbnail`}
-            viewTransitionName={imageTransitionName}
-          />
+          <MDXImage src={post.media.image} alt={`${post.title} thumbnail`} viewTransitionName={imageTransitionName} />
         ) : (
-          <div
-            aria-hidden
-            className="my-6 aspect-video rounded-base border border-border bg-gray-3"
-            style={{ viewTransitionName: imageTransitionName }}
-          />
+          <div aria-hidden className="my-6 aspect-video rounded-base border border-border bg-gray-3" style={{ viewTransitionName: imageTransitionName }} />
         ))}
       <div className="mt-10 flex flex-col">
         <div>

@@ -77,7 +77,7 @@ export function useProximityHover<T extends HTMLElement>(containerRef: RefObject
   const sessionRef = useRef(0);
   const rafIdRef = useRef<number | null>(null);
   const remeasureRafIdRef = useRef<number | null>(null);
-  const [registeredItemsVersion, setRegisteredItemsVersion] = useState(0);
+  const [registeredItems, setRegisteredItems] = useState<HTMLElement[]>([]);
 
   /**
    * Publishes a rect for every registered item. Returns false when the
@@ -190,7 +190,7 @@ export function useProximityHover<T extends HTMLElement>(containerRef: RefObject
       } else {
         itemsRef.current.delete(index);
       }
-      setRegisteredItemsVersion((version) => version + 1);
+      setRegisteredItems(Array.from(itemsRef.current.values()));
       // Coalesce rapid register/unregister calls (e.g. when an AnimatePresence
       // remounts a list of rows) into a single remeasure on the next frame,
       // so consumers don't have to manually call measureItems after the
@@ -338,14 +338,14 @@ export function useProximityHover<T extends HTMLElement>(containerRef: RefObject
     const observer = new ResizeObserver(() => scheduleMeasurement(measurementAttempts));
 
     if (container) observer.observe(container);
-    for (const element of Array.from(itemsRef.current.values())) {
+    for (const element of registeredItems) {
       observer.observe(element);
     }
 
     return () => {
       observer.disconnect();
     };
-  }, [containerRef, registeredItemsVersion, scheduleMeasurement]);
+  }, [containerRef, registeredItems, scheduleMeasurement]);
 
   // Clean up rAF and the item observer on unmount
   useEffect(() => {

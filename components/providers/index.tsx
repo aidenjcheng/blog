@@ -1,8 +1,8 @@
 import { HomeScrollRestoration } from "@/components/scroll-restoration";
 import { AppThemeProvider } from "@/components/theme";
 
-import { ViewTransitions } from "next-view-transitions";
 import { LazyMotion, domMax } from "motion/react";
+import { ViewTransitions } from "next-view-transitions";
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (

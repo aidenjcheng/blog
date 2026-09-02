@@ -2,9 +2,9 @@
 
 import type { Post } from "@/types";
 
-import { saveHomeScrollPosition } from "@/lib/home-scroll-position";
 import { Card, CardGroup } from "@/components/ui/card";
 import { formatter } from "@/lib/formatter";
+import { saveHomeScrollPosition } from "@/lib/home-scroll-position";
 
 import { ChevronRight } from "lucide-react";
 import { Link as NextViewTransition } from "next-view-transitions";
