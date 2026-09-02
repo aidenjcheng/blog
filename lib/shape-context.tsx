@@ -2,15 +2,7 @@
 
 import type { ReactNode } from "react";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 
 type ShapeVariant = "pill" | "rounded";
 
@@ -73,8 +65,7 @@ function useShape(): ShapeClasses {
 
 function useShapeContext() {
   const ctx = useContext(ShapeContext);
-  if (!ctx)
-    throw new Error("useShapeContext must be used within a ShapeProvider");
+  if (!ctx) throw new Error("useShapeContext must be used within a ShapeProvider");
   return ctx;
 }
 
@@ -86,9 +77,7 @@ function ShapeProvider({
   defaultShape?: ShapeVariant;
 }) {
   const [shape, setShapeState] = useState<ShapeVariant>(defaultShape);
-  const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
-    null,
-  );
+  const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Run a state change under the `.transitioning` guard (added + reflow-flushed
   // first so the 180ms border-radius cross-fade applies). Clearing the previous
@@ -98,12 +87,8 @@ function ShapeProvider({
     root.classList.add("transitioning");
     void root.offsetHeight;
     callback();
-    if (transitionTimeoutRef.current)
-      clearTimeout(transitionTimeoutRef.current);
-    transitionTimeoutRef.current = setTimeout(
-      () => root.classList.remove("transitioning"),
-      200,
-    );
+    if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
+    transitionTimeoutRef.current = setTimeout(() => root.classList.remove("transitioning"), 200);
   }, []);
 
   const setShape = useCallback(
@@ -118,21 +103,13 @@ function ShapeProvider({
   // system — e.g. the @layer base :focus-visible fallback ring in
   // globals.css. Set on <html> so portalled content sees it too.
   useEffect(() => {
-    document.documentElement.style.setProperty(
-      "--shape-input-radius",
-      `${shapeMap[shape].bgRadius}px`,
-    );
+    document.documentElement.style.setProperty("--shape-input-radius", `${shapeMap[shape].bgRadius}px`);
   }, [shape]);
 
-  const value = useMemo(
-    () => ({ shape, setShape, classes: shapeMap[shape] }),
-    [shape, setShape],
-  );
+  const value = useMemo(() => ({ shape, setShape, classes: shapeMap[shape] }), [shape, setShape]);
 
-  return (
-    <ShapeContext.Provider value={value}>{children}</ShapeContext.Provider>
-  );
+  return <ShapeContext.Provider value={value}>{children}</ShapeContext.Provider>;
 }
 
-export { ShapeProvider, useShape, useShapeContext, shapeMap };
+export { ShapeProvider, useShape, useShapeContext };
 export type { ShapeVariant, ShapeClasses };

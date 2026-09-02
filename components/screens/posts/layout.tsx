@@ -5,9 +5,15 @@ import { getPosts } from "@/lib/mdx";
 import React from "react";
 
 interface LayoutWrapperProps {
-  children: React.ReactElement;
+  children: React.ReactElement<LayoutProps>;
   route: string;
   post: Post;
+}
+
+interface LayoutProps {
+  posts: Post[];
+  post: Post;
+  route: string;
 }
 
 export default async function LayoutWrapper({ children, route, post }: LayoutWrapperProps) {

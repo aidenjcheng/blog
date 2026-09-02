@@ -1,4 +1,3 @@
-import { Category } from "@/components/category";
 import { Footer } from "@/components/footer";
 import { ProjectThumbnail } from "@/components/project-thumbnail";
 import { formatter } from "@/lib/formatter";
@@ -22,22 +21,19 @@ export default function Home() {
         <div className=" text-base">
           {/* <Logo className="w-12 h-12" /> */}
           <h1 className="text-base">Aiden Cheng</h1>
-          <p className="text-base text-muted">
-            Last updated {lastUpdated ? formatter.date(lastUpdated) : "—"}
-          </p>
+          <p className="text-base text-muted">Last updated {lastUpdated ? formatter.date(lastUpdated) : "—"}</p>
 
-          <p className=" mt-5">I'm a high school student on the east coast. I like to code and design software</p>
+          {/*<p className=" mt-5"> I like to code and design software</p>*/}
         </div>
       </div>
       <div className="flex flex-1 flex-col">
-
         <Spacer />
         {/* <Posts category="wall" /> */}
         {/*<Category category="projects" />
         <Category category="thoughts" />*/}
         <ProjectThumbnail category="projects" />
 
-         <Spacer />
+        <Spacer />
         <Footer />
       </div>
     </div>

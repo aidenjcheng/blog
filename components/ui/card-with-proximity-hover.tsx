@@ -4,26 +4,33 @@ import type { IconComponent } from "@/lib/icon-context";
 import type { SizeVariant } from "@/lib/size-context";
 import type { HTMLAttributes, ReactElement, ReactNode } from "react";
 
+import { useProximityHover } from "@/hooks/use-proximity-hover";
 import { fontWeights } from "@/lib/font-weight";
 import { useIcon } from "@/lib/icon-context";
 import { useShape } from "@/lib/shape-context";
 import { SizeProvider, useSize } from "@/lib/size-context";
+import { spring } from "@/lib/springs";
 import { cn } from "@/lib/utils";
 
+import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-m";
 import { Link } from "next-view-transitions";
 import Image from "next/image";
-import { Children, cloneElement, createContext, forwardRef, isValidElement, useContext, useMemo, useRef } from "react";
+import { Children, cloneElement, createContext, forwardRef, isValidElement, useContext, useEffect, useMemo, useRef } from "react";
 
 // ---------------------------------------------------------------------------
 // Card is shadcn/ui's compositional card — the same parts and `data-slot`
 // contract (Card, CardHeader, CardTitle, CardDescription, CardAction,
 // CardContent, CardFooter) — with the Fluid Functionalism layer on top:
 // design tokens, a weight-animated title, and a sibling CardGroup that owns
-// layout (stacked list, inline rows, or grid).
+// layout (stacked list, inline rows, or grid) plus the magnetic proximity
+// highlight that previews where a click will land.
 //
 // Unlike stock shadcn, the surface is transparent and borderless by default:
 // cards inherit whatever substrate their parent provides (see the Surfaces
-// system) and lean on hairline dividers rather than a drawn frame.
+// system) and lean on hairline dividers / the proximity highlight rather than
+// a drawn frame. A Card renders fine on its own; inside a CardGroup it
+// registers itself so the group's highlight can find it.
 // ---------------------------------------------------------------------------
 
 type CardOrientation = "card" | "inline";
@@ -32,6 +39,8 @@ type CardBorder = "none" | "outlined";
 // ── Group context ────────────────────────────────────────
 
 interface CardGroupContextValue {
+  registerItem: (index: number, element: HTMLElement | null) => void;
+  activeIndex: number | null;
   /** Index of the persistently-selected card, or -1. Its neighbours drop the
    *  hairline that would otherwise cut across the selection fill. */
   selectedIndex: number;
@@ -80,7 +89,8 @@ interface CardGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, "onDrag"> 
    *  horizontal row (leading media, trailing footer), like a Table row.
    *  @default "card" */
   orientation?: CardOrientation;
-  /** Number of grid columns. @default 1 */
+  /** Number of grid columns. >1 enables 2-D proximity across rows and columns.
+   *  @default 1 */
   columns?: number;
   /** "none" — borderless (default), separated only by subtle dividers.
    *  "outlined" — draws a border: one shared frame when grouped, or one per
@@ -89,14 +99,40 @@ interface CardGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, "onDrag"> 
   /** Split the group into individually-shaped cards with a gap between them
    *  (a grid of tiles) instead of one continuous divided block. @default false */
   separated?: boolean;
+  /** Enable the magnetic proximity-hover highlight. @default true */
+  proximityHover?: boolean;
+  /** Extra space, in pixels, around the proximity highlight. @default 0 */
+  proximityPadding?: number;
+  /** Additional classes for the proximity highlight. */
+  proximityClassName?: string;
 }
 
 const CardGroup = forwardRef<HTMLDivElement, CardGroupProps>(
-  ({ orientation = "card", columns = 1, border = "none", separated = false, className, children, ...props }, ref) => {
+  (
+    {
+      orientation = "card",
+      columns = 1,
+      border = "none",
+      separated = false,
+      proximityHover = true,
+      proximityPadding = 0,
+      proximityClassName,
+      className,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
+    const containerRef = useRef<HTMLDivElement>(null);
     const shape = useShape();
 
-    // Assign each valid child a stable index so callers never thread one
-    // through by hand.
+    // >1 column wraps into a grid, where nearest-item must be resolved in two
+    // dimensions; a single column is a plain vertical list.
+    const axis = columns > 1 ? "xy" : "y";
+    const { activeIndex, itemRects, sessionRef, handlers, registerItem, measureItems } = useProximityHover(containerRef, { axis });
+
+    // Assign each valid child a stable proximity index so callers never thread
+    // one through by hand (Table asks for it; here the group owns it).
     const childArray = Children.toArray(children).filter(isValidElement);
     const count = childArray.length;
     const indexed = childArray.map((child, i) => cloneElement(child as ReactElement<{ index?: number }>, { index: i }));
@@ -104,11 +140,17 @@ const CardGroup = forwardRef<HTMLDivElement, CardGroupProps>(
     // would otherwise slice through the selection fill.
     const selectedIndex = childArray.findIndex((child) => (child.props as { selected?: boolean }).selected);
 
+    useEffect(() => {
+      measureItems();
+    }, [measureItems]);
+
     const outlined = border === "outlined";
     const divided = !separated;
 
     const contextValue = useMemo<CardGroupContextValue>(
       () => ({
+        registerItem,
+        activeIndex,
         selectedIndex,
         orientation,
         columns,
@@ -117,20 +159,27 @@ const CardGroup = forwardRef<HTMLDivElement, CardGroupProps>(
         divided,
         outlined,
       }),
-      [selectedIndex, orientation, columns, count, separated, divided, outlined],
+      [registerItem, activeIndex, selectedIndex, orientation, columns, count, separated, divided, outlined],
     );
+
+    const proximityInset = Math.max(0, proximityPadding);
+    const activeRect = proximityHover && activeIndex !== null ? itemRects[activeIndex] : null;
 
     return (
       <CardGroupContext.Provider value={contextValue}>
         <div
-          ref={ref}
+          ref={(node) => {
+            (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+            if (typeof ref === "function") ref(node);
+            else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+          }}
           {...props}
           data-slot="card-group"
           data-orientation={orientation}
           className={cn(
             "relative grid",
-            // A shared frame clips dividers to its rounded corners; separated
-            // tiles clip themselves.
+            // A shared frame clips the highlight + dividers to its rounded
+            // corners; separated tiles clip themselves.
             outlined && !separated && `overflow-hidden border border-border/60 ${shape.container}`,
             separated ? "gap-2" : "gap-0",
             className,
@@ -138,7 +187,33 @@ const CardGroup = forwardRef<HTMLDivElement, CardGroupProps>(
           style={{
             gridTemplateColumns: `repeat(${Math.max(1, columns)}, minmax(0, 1fr))`,
           }}
+          onMouseEnter={proximityHover ? handlers.onMouseEnter : undefined}
+          onMouseMove={proximityHover ? handlers.onMouseMove : undefined}
+          onMouseLeave={proximityHover ? handlers.onMouseLeave : undefined}
         >
+          {/* Proximity highlight — a single magnetic layer that springs to the
+              card nearest the cursor, previewing where a click will land. */}
+          <AnimatePresence>
+            {activeRect && (
+              <m.div
+                key={sessionRef.current}
+                aria-hidden
+                className={cn("pointer-events-none absolute z-0 bg-hover", shape.container, proximityClassName)}
+                layout
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                style={{
+                  top: activeRect.top - proximityInset,
+                  left: activeRect.left - proximityInset,
+                  width: activeRect.width + proximityInset * 2,
+                  height: activeRect.height + proximityInset * 2,
+                }}
+                exit={{ opacity: 0, transition: spring.fast.exit }}
+                transition={{ ...spring.fast, opacity: { duration: 0.08 } }}
+              />
+            )}
+          </AnimatePresence>
+
           {indexed}
         </div>
       </CardGroupContext.Provider>
@@ -151,7 +226,7 @@ CardGroup.displayName = "CardGroup";
 // ── Card ─────────────────────────────────────────────────
 
 interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, "onClick"> {
-  /** Makes the whole card an interactive target.
+  /** Makes the whole card an interactive target; proximity hover previews it.
    *  Renders a stretched link when `href` is set, else a stretched button. */
   onClick?: () => void;
   href?: string;
@@ -159,7 +234,7 @@ interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, "onClick"> {
   /** Accessible name for the stretched link/button when the whole card is
    *  clickable (the card's visible title isn't wired up automatically). */
   label?: string;
-  /** Persistent selected state. */
+  /** Persistent selected state, on top of the transient proximity hover. */
   selected?: boolean;
   disabled?: boolean;
   /** Shows a dismiss (✕) button in the corner. */
@@ -212,19 +287,30 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
     const separated = group?.separated ?? true;
     const divided = group?.divided ?? false;
     const outlined = group?.outlined ?? false;
+    const activeIndex = group?.activeIndex ?? null;
     const selectedIndex = group?.selectedIndex ?? -1;
 
+    // Depend on the stable registerItem callback, not the whole group context —
+    // the context object's identity changes on every proximity/selection frame,
+    // which would otherwise re-register every card each frame.
+    const registerItem = group?.registerItem;
+    useEffect(() => {
+      if (index === undefined || !registerItem) return;
+      registerItem(index, internalRef.current);
+      return () => registerItem(index, null);
+    }, [index, registerItem]);
+
     // Divider geometry: draw a hairline toward the neighbour below / to the
-    // right, but drop it next to the selected card so the selection fill reads
-    // clean (the same trick Table uses on row borders).
+    // right, but drop it next to the active OR selected card so the highlight
+    // and selection fill read clean (the same trick Table uses on row borders).
     const col = index !== undefined ? index % columns : 0;
     const hasBelow = index !== undefined && index + columns < count;
     const hasRight = index !== undefined && col < columns - 1 && index + 1 < count;
     const self = index ?? -1;
     const touchesBelow = (i: number) => i === self || i === self + columns;
     const touchesRight = (i: number) => i === self || i === self + 1;
-    const showBottom = divided && hasBelow && !touchesBelow(selectedIndex);
-    const showRight = divided && hasRight && !touchesRight(selectedIndex);
+    const showBottom = divided && hasBelow && !(touchesBelow(activeIndex ?? -1) || touchesBelow(selectedIndex));
+    const showRight = divided && hasRight && !(touchesRight(activeIndex ?? -1) || touchesRight(selectedIndex));
 
     const isInline = orientation === "inline";
     // An inline card with a full-bleed image reflows so its actions stack under
@@ -234,7 +320,8 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
     const hasImage = Children.toArray(children).some(isCardImage);
     const inlineImage = isInline && hasImage;
     const clickable = !!href || !!onClick;
-    // Title weight follows the persistent selected state only.
+    // Title weight follows the persistent selected state only — proximity hover
+    // previews via the highlight fill, not by bolding the label.
     const emphasized = selected;
 
     // A standalone card (no group) is its own tile — always rounded + clipped.
@@ -302,6 +389,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
             else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
           }}
           data-slot="card"
+          data-proximity-index={index}
           data-selected={selected || undefined}
           data-orientation={orientation}
           aria-disabled={disabled || undefined}

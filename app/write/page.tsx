@@ -14,11 +14,13 @@ export default function Write() {
             <ImageUpload />
           </div>
           <div className="h-full">
-            <Input type="text" placeholder="Title" className="w-full bg-white-a1 font-medium text-[14px] outline-none" />{" "}
+            <label htmlFor="title">Title</label>
+            <Input id="title" type="text" placeholder="Title" className="w-full bg-white-a1 font-medium text-[14px] outline-none" />{" "}
           </div>
         </div>
 
-        <textarea placeholder="Content" className="h-screen w-full resize-none bg-white-a1 text-[14px] outline-none" />
+        <label htmlFor="content">Content</label>
+        <textarea id="content" placeholder="Content" className="h-screen w-full resize-none bg-white-a1 text-[14px] outline-none" />
       </div>
     </React.Fragment>
   );

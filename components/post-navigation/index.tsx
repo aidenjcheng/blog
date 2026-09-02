@@ -10,14 +10,14 @@ interface PostNavigationProps {
 }
 
 function PostNavigation({ posts }: PostNavigationProps) {
-  posts.sort((a, b) => {
+  const sortedPosts = posts.toSorted((a, b) => {
     return new Date(b.time.created).getTime() - new Date(a.time.created).getTime();
   });
 
   const currentSlug = usePathname().split("/").pop();
-  const currentIndex = posts.findIndex((post) => post.slug === currentSlug);
-  const previous = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
-  const next = currentIndex > 0 ? posts[currentIndex - 1] : null;
+  const currentIndex = sortedPosts.findIndex((post) => post.slug === currentSlug);
+  const previous = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
+  const next = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
 
   if (!previous && !next) {
     return null;

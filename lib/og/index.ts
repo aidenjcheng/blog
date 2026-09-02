@@ -1,7 +1,19 @@
 import type { Metadata } from "next/types";
 
+const getMetadataBase = (value?: string) => {
+  if (!value) return undefined;
+  try {
+    return new URL(value);
+  } catch {
+    return undefined;
+  }
+};
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+const metadataBase = getMetadataBase(siteUrl);
+
 export const OpenGraph: Metadata = {
-  metadataBase: process.env.NEXT_PUBLIC_SITE_URL ? new URL(process.env.NEXT_PUBLIC_SITE_URL) : undefined,
+  metadataBase,
   title: {
     default: "Aiden Cheng",
     template: "%s",

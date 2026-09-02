@@ -4,10 +4,42 @@ import type { MotionValue } from "motion/react";
 
 import { cn } from "@/lib/cn";
 
-import { motion } from "motion/react";
+import * as m from "motion/react-m";
 import React, { useCallback, useEffect, useState } from "react";
 
 import "./collapsible.css";
+
+const scroll = (id: string) => {
+  for (const heading of Array.from(document.querySelectorAll("h1, h2, h3"))) {
+    heading.setAttribute("data-highlight", "false");
+  }
+
+  const element = document.getElementById(id);
+
+  if (element) {
+    const top = element.offsetTop - 100;
+    window.scrollTo({
+      top,
+      behavior: "smooth",
+    });
+
+    element.setAttribute("data-highlight", "true");
+
+    window.setTimeout(() => {
+      element.setAttribute("data-highlight", "false");
+    }, 2000);
+  }
+};
+
+const progressIcon: React.CSSProperties = {
+  transform: "rotate(-90deg)",
+};
+
+const progressIconIndicator: React.CSSProperties = {
+  strokeDashoffset: 0,
+  fill: "none",
+  stroke: "currentColor",
+};
 
 export const TableOfContents = ({
   title,
@@ -22,14 +54,17 @@ export const TableOfContents = ({
   // const { scrollYProgress } = useScroll();
 
   const getHeadings = useCallback(() => {
-    return Array.from(document.querySelectorAll("h1, h2, h3"))
-      .filter((heading) => heading.id)
-      .map((heading) => ({
-        id: heading.id,
-        text: heading.textContent || "",
-        level: heading.tagName.toLowerCase(),
-        top: (heading as HTMLElement).offsetTop,
-      }));
+    return Array.from(document.querySelectorAll("h1, h2, h3")).reduce<{ id: string; text: string; level: string; top: number }[]>((headings, heading) => {
+      if (heading.id) {
+        headings.push({
+          id: heading.id,
+          text: heading.textContent || "",
+          level: heading.tagName.toLowerCase(),
+          top: (heading as HTMLElement).offsetTop,
+        });
+      }
+      return headings;
+    }, []);
   }, []);
 
   useEffect(() => {
@@ -68,28 +103,6 @@ export const TableOfContents = ({
       observer.disconnect();
     };
   }, [getHeadings, visibleHeadings]);
-
-  const scroll = (id: string) => {
-    for (const heading of Array.from(document.querySelectorAll("h1, h2, h3"))) {
-      heading.setAttribute("data-highlight", "false");
-    }
-
-    const element = document.getElementById(id);
-
-    if (element) {
-      const top = element.offsetTop - 100;
-      window.scrollTo({
-        top: top,
-        behavior: "smooth",
-      });
-
-      element.setAttribute("data-highlight", "true");
-
-      setTimeout(() => {
-        element.setAttribute("data-highlight", "false");
-      }, 2000);
-    }
-  };
 
   const lastVisibleHeadingId = Array.from(visibleHeadings).pop();
 
@@ -171,20 +184,10 @@ const ProgressIndicator = ({
   scrollYProgress: MotionValue;
   className?: string;
 }) => {
-  const progressIcon: React.CSSProperties = {
-    transform: "rotate(-90deg)",
-  };
-
-  const progressIconIndicator: React.CSSProperties = {
-    strokeDashoffset: 0,
-    fill: "none",
-    stroke: "currentColor", // Add stroke color
-  };
-
   return (
     <svg className={cn("size-8", className)} style={progressIcon} viewBox="0 0 100 100">
       <circle className="fill-none stroke-current opacity-20" cx="50" cy="50" r="25" strokeWidth={10} pathLength="1" />
-      <motion.circle
+      <m.circle
         cx="50"
         cy="50"
         r="25"

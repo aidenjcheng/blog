@@ -2,13 +2,7 @@
 
 import type { ReactNode } from "react";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
 
 type SizeVariant = "default" | "compact";
 
@@ -111,9 +105,7 @@ type TypeScaleRole = keyof typeof typeScale;
 
 /** The type scale resolved for the active ladder step (px per role):
  *  explicit override > surrounding SizeProvider > "default". */
-function useTypeScale(
-  override?: SizeVariant | null,
-): Record<TypeScaleRole, number> {
+function useTypeScale(override?: SizeVariant | null): Record<TypeScaleRole, number> {
   const variant = useSizeVariant(override);
   return {
     display: typeScale.display[variant],
@@ -145,8 +137,7 @@ function useSize(override?: SizeVariant | null): SizeClasses {
 
 function useSizeContext() {
   const ctx = useContext(SizeContext);
-  if (!ctx)
-    throw new Error("useSizeContext must be used within a SizeProvider");
+  if (!ctx) throw new Error("useSizeContext must be used within a SizeProvider");
   return ctx;
 }
 
@@ -176,21 +167,10 @@ function SizeProvider({
     [isControlled],
   );
 
-  const value = useMemo(
-    () => ({ size: resolved, setSize, classes: sizeMap[resolved] }),
-    [resolved, setSize],
-  );
+  const value = useMemo(() => ({ size: resolved, setSize, classes: sizeMap[resolved] }), [resolved, setSize]);
 
   return <SizeContext.Provider value={value}>{children}</SizeContext.Provider>;
 }
 
-export {
-  SizeProvider,
-  useSize,
-  useSizeVariant,
-  useSizeContext,
-  useTypeScale,
-  sizeMap,
-  typeScale,
-};
+export { SizeProvider, useSize, useSizeVariant, useSizeContext, useTypeScale };
 export type { SizeVariant, SizeClasses, TypeScaleRole, TypeScaleStep };

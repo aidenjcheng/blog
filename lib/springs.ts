@@ -27,5 +27,4 @@ export const spring = {
 // throttled/background tab can stall the animation, so a timer force-unmounts
 // after the tier's exit duration plus a safety buffer. Deriving it here keeps
 // the timers in step with the tokens above.
-export const exitFallbackMs = (tier: { exit: { duration: number } }) =>
-  Math.round(tier.exit.duration * 1000) + 100;
+export const exitFallbackMs = (tier: { exit: { duration: number } }) => Math.round(tier.exit.duration * 1000) + 100;

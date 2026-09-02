@@ -4,10 +4,11 @@ import type { PluggableList } from "unified";
 
 import FootnoteBackReference from "@/components/footnote/back-reference";
 import FootnoteForwardReference from "@/components/footnote/forward-reference";
-import MDXImage from "@/components/image";
-import MDXVideo from "@/components/video";
 import Link from "@/components/link";
-import Preview from "@/components/preview";
+import { ImageComponent } from "@/components/mdx/image";
+import { PreviewComponent } from "@/components/mdx/preview";
+import { WallOfNames } from "@/components/mdx/wall-of-names";
+import MDXVideo from "@/components/video";
 import { cn } from "@/lib/cn";
 
 import { MDXRemote } from "next-mdx-remote/rsc";
@@ -15,8 +16,6 @@ import React from "react";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
-
-import { earlyFollowers } from "./app/(posts)/wall/data";
 
 const components: MDXComponents = {
   PreviewExample: () => {
@@ -32,19 +31,9 @@ const components: MDXComponents = {
       </div>
     );
   },
-  WallOfNames: () => {
-    return (
-      <div className="flex w-full flex-col gap-1 ">
-        {earlyFollowers.reverse().map((name, index) => (
-          <a key={name} href={`https://instagram.com/${name}`} target="_blank" className="border-border border-b py-3" rel="noreferrer">
-            {name} {index === 0 && "❤️"}
-          </a>
-        ))}
-      </div>
-    );
-  },
-  Preview: ({ children, codeblock }) => <Preview codeblock={codeblock ? codeblock : undefined}>{children}</Preview>,
-  Image: ({ caption, alt, ...props }) => <MDXImage {...props} caption={caption} alt={alt} />,
+  WallOfNames,
+  Preview: PreviewComponent,
+  Image: ImageComponent,
   video: MDXVideo,
   h2: ({ children, id }: React.HTMLAttributes<HTMLHeadingElement>) => {
     if (id?.includes("footnote-label")) {
@@ -79,7 +68,7 @@ const components: MDXComponents = {
   ol: ({ className, ...props }: React.HTMLAttributes<HTMLOListElement>) => {
     if (
       React.Children.toArray(props.children).some(
-        (child) => React.isValidElement(child) && (child as React.ReactElement).props.id?.includes("user-content-fn-"),
+        (child) => React.isValidElement<{ id?: string }>(child) && child.props.id?.includes("user-content-fn-"),
       )
     ) {
       return (

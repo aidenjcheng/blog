@@ -2,13 +2,13 @@
 
 import { DeployLink } from "@/lib/deploy";
 
-import { motion } from "motion/react";
+import * as m from "motion/react-m";
 import Link from "next/link";
 
 export const DeployButton = () => {
   return (
     <div className="-translate-x-1/2 fixed bottom-6 left-1/2 text-small">
-      <motion.div
+      <m.div
         initial={{
           opacity: 0,
           y: 56,
@@ -28,7 +28,7 @@ export const DeployButton = () => {
         }}
       >
         <Link href={DeployLink}>
-          <motion.div
+          <m.div
             whileHover={{
               scale: 0.98,
               opacity: 0.8,
@@ -55,9 +55,9 @@ export const DeployButton = () => {
                 </clipPath>
               </defs>
             </svg>
-          </motion.div>
+          </m.div>
         </Link>
-      </motion.div>
+      </m.div>
     </div>
   );
 };

@@ -5,20 +5,22 @@ import type { ImageProps } from "next/image";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 import { X } from "lucide-react";
-import { MotionConfig, motion } from "motion/react";
+import { MotionConfig } from "motion/react";
+import * as m from "motion/react-m";
 import Image from "next/image";
 import { useState } from "react";
 
 // Create a motion wrapper for Next.js Image to avoid type conflicts
-const MotionImage = motion.div;
+const MotionImage = m.div;
 
 interface MDXImageProps extends Omit<ImageProps, "src"> {
   src: string;
   alt: string;
   caption?: string;
+  viewTransitionName?: string;
 }
 
-export default function MDXImage({ caption, alt, src, ...props }: MDXImageProps) {
+export default function MDXImage({ caption, alt, src, viewTransitionName, ...props }: MDXImageProps) {
   const [isOpen, setIsOpen] = useState(false);
   const uniqueId = src.replace(/[^a-zA-Z0-9]/g, "");
 
@@ -36,11 +38,12 @@ export default function MDXImage({ caption, alt, src, ...props }: MDXImageProps)
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger
             render={
-              <motion.button
+              <m.button
                 type="button"
                 aria-label={`Open image preview: ${alt}`}
                 layoutId={`image-preview-dialog${uniqueId}`}
                 className="relative w-full cursor-pointer overflow-hidden rounded-lg border border-border"
+                style={{ viewTransitionName }}
                 whileHover={{ scale: 0.975, opacity: 0.9 }}
               />
             }
@@ -52,7 +55,7 @@ export default function MDXImage({ caption, alt, src, ...props }: MDXImageProps)
           <DialogContent className="w-[90vw] max-w-[720px] p-0" showCloseButton={false}>
             <DialogTitle className="sr-only">Image Preview</DialogTitle>
             <DialogDescription className="sr-only">{alt}</DialogDescription>
-            <motion.div layoutId={`image-preview-dialog${uniqueId}`} className="relative w-full overflow-hidden rounded-2xl">
+            <m.div layoutId={`image-preview-dialog${uniqueId}`} className="relative w-full overflow-hidden rounded-2xl">
               <MotionImage layoutId={`image-preview${uniqueId}`} className="h-auto w-full select-none overflow-hidden rounded-2xl">
                 <Image src={src} alt={alt} width={1000} height={1000} sizes="100vw" className="h-auto w-full object-contain" {...props} />
               </MotionImage>
@@ -67,7 +70,7 @@ export default function MDXImage({ caption, alt, src, ...props }: MDXImageProps)
               >
                 <X size={20} color="white" />
               </DialogClose>
-            </motion.div>
+            </m.div>
           </DialogContent>
         </Dialog>
       </MotionConfig>

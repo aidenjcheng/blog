@@ -1,45 +1,41 @@
 type DateFormat = "YMD" | "MD" | "M" | "Y";
 
+const dateFormatters: Record<DateFormat, Intl.DateTimeFormat> = {
+  YMD: new Intl.DateTimeFormat("en", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  }),
+  MD: new Intl.DateTimeFormat("en", {
+    month: "short",
+    day: "numeric",
+  }),
+  M: new Intl.DateTimeFormat("en", {
+    month: "short",
+  }),
+  Y: new Intl.DateTimeFormat("en", {
+    year: "numeric",
+  }),
+};
+
+const numberFormatter = new Intl.NumberFormat("en", {
+  style: "decimal",
+});
+
+const relativeTimeFormatter = new Intl.RelativeTimeFormat("en", {
+  numeric: "auto",
+});
+
 const date = (input: Date, format: DateFormat = "YMD"): string => {
-  switch (format) {
-    case "YMD":
-      return new Intl.DateTimeFormat("en", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      }).format(input);
-    case "MD":
-      return new Intl.DateTimeFormat("en", {
-        month: "short",
-        day: "numeric",
-      }).format(input);
-    case "M":
-      return new Intl.DateTimeFormat("en", {
-        month: "short",
-      }).format(input);
-    case "Y":
-      return new Intl.DateTimeFormat("en", {
-        year: "numeric",
-      }).format(input);
-    default:
-      return new Intl.DateTimeFormat("en", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      }).format(input);
-  }
+  return dateFormatters[format].format(input);
 };
 
 const number = (input: number): string => {
-  return new Intl.NumberFormat("en", {
-    style: "decimal",
-  }).format(input);
+  return numberFormatter.format(input);
 };
 
 const time = (value: number, unit: Intl.RelativeTimeFormatUnit): string => {
-  return new Intl.RelativeTimeFormat("en", {
-    numeric: "auto",
-  }).format(value, unit);
+  return relativeTimeFormatter.format(value, unit);
 };
 
 export const formatter = {

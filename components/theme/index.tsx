@@ -6,14 +6,29 @@ import { cn } from "@/lib/cn";
 
 import { Monitor, Moon, Sun } from "lucide-react";
 import { ThemeProvider, useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export const AppThemeSwitcher = () => {
   const [mounted, setMounted] = useState(false);
+  const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { theme, setTheme } = useTheme();
+
+  const transitionTheme = useCallback((callback: () => void) => {
+    const root = document.documentElement;
+    root.classList.add("transitioning");
+    void root.offsetHeight;
+    callback();
+    if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
+    transitionTimeoutRef.current = setTimeout(() => root.classList.remove("transitioning"), 200);
+  }, []);
 
   useEffect(() => {
     setMounted(true);
+
+    return () => {
+      if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
+      document.documentElement.classList.remove("transitioning");
+    };
   }, []);
 
   if (!mounted) return null;
@@ -34,7 +49,7 @@ export const AppThemeSwitcher = () => {
         <button
           type="button"
           key={label}
-          onClick={() => setTheme(label)}
+          onClick={() => transitionTheme(() => setTheme(label))}
           aria-label={`Use ${label} theme`}
           aria-pressed={active}
           className={cn(
@@ -55,12 +70,7 @@ export const AppThemeProvider = ({
   children: React.ReactNode;
 }) => {
   return (
-    <ThemeProvider
-      enableSystem={true}
-      attribute="class"
-      storageKey="theme"
-      defaultTheme="system"
-    >
+    <ThemeProvider enableSystem={true} attribute="class" storageKey="theme" defaultTheme="system">
       {children}
     </ThemeProvider>
   );

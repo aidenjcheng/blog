@@ -6,7 +6,8 @@ import { cn } from "@/lib/cn";
 
 import { useEffect } from "react";
 
-type MDXVideoProps = VideoHTMLAttributes<HTMLVideoElement> & {
+type MDXVideoProps = Omit<VideoHTMLAttributes<HTMLVideoElement>, "src"> & {
+  src?: string;
   "aspect-ratio"?: string;
   "disable-autoplay"?: boolean;
   "show-time"?: boolean;

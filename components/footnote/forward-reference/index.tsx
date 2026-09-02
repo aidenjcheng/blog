@@ -1,12 +1,14 @@
 "use client";
 
+import type { ReactNode } from "react";
+
 import styles from "../styles.module.css";
 
 interface Props extends React.HTMLProps<HTMLDivElement> {
   href: string;
 }
 
-function FootnoteForwardReference({ href, children }: Props): JSX.Element {
+function FootnoteForwardReference({ href, children }: Props): ReactNode {
   const scroll = () => {
     const footnote = document.querySelector(`[id="${href.replace("fn-", "fnref-")}"]`);
 

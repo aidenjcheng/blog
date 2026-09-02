@@ -8,12 +8,12 @@ interface PostProps {
   category: string;
 }
 
+const Seperator = () => <div className="border-border border-t" />;
+
 export const Posts = ({ category }: PostProps) => {
   const posts = getPosts(category).sort((a, b) => {
     return new Date(b.time.created).getTime() - new Date(a.time.created).getTime();
   });
-
-  const Seperator = () => <div className="border-border border-t" />;
 
   if (posts.length === 0) {
     return null;

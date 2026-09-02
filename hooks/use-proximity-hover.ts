@@ -67,10 +67,7 @@ interface UseProximityHoverReturn {
  */
 const measurementAttempts = 3;
 
-export function useProximityHover<T extends HTMLElement>(
-  containerRef: RefObject<T | null>,
-  options: UseProximityHoverOptions = {},
-): UseProximityHoverReturn {
+export function useProximityHover<T extends HTMLElement>(containerRef: RefObject<T | null>, options: UseProximityHoverOptions = {}): UseProximityHoverReturn {
   const { axis = "y", isItemDisabled } = options;
   const itemsRef = useRef(new Map<number, HTMLElement>());
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -80,6 +77,7 @@ export function useProximityHover<T extends HTMLElement>(
   const sessionRef = useRef(0);
   const rafIdRef = useRef<number | null>(null);
   const remeasureRafIdRef = useRef<number | null>(null);
+  const [registeredItemsVersion, setRegisteredItemsVersion] = useState(0);
 
   /**
    * Publishes a rect for every registered item. Returns false when the
@@ -98,10 +96,7 @@ export function useProximityHover<T extends HTMLElement>(
       // overlays to the top of the list, so treat the whole pass as
       // incomplete. A boxless element is the only case: `position: fixed`
       // items also have no offsetParent but do have a size.
-      const hasLayoutBox =
-        element.offsetParent !== null ||
-        element.offsetWidth > 0 ||
-        element.offsetHeight > 0;
+      const hasLayoutBox = element.offsetParent !== null || element.offsetWidth > 0 || element.offsetHeight > 0;
       if (!hasLayoutBox) {
         everyItemHasLayout = false;
         return;
@@ -118,11 +113,7 @@ export function useProximityHover<T extends HTMLElement>(
       let top = element.offsetTop;
       let left = element.offsetLeft;
       let ancestor = element.offsetParent as HTMLElement | null;
-      while (
-        ancestor &&
-        ancestor !== container &&
-        container.contains(ancestor)
-      ) {
+      while (ancestor && ancestor !== container && container.contains(ancestor)) {
         top += ancestor.offsetTop + ancestor.clientTop;
         left += ancestor.offsetLeft + ancestor.clientLeft;
         ancestor = ancestor.offsetParent as HTMLElement | null;
@@ -143,13 +134,7 @@ export function useProximityHover<T extends HTMLElement>(
       const p = prev[i];
       const r = rects[i];
       if (p === r) continue; // both undefined (sparse slot)
-      changed =
-        !p ||
-        !r ||
-        p.top !== r.top ||
-        p.left !== r.left ||
-        p.width !== r.width ||
-        p.height !== r.height;
+      changed = !p || !r || p.top !== r.top || p.left !== r.left || p.width !== r.width || p.height !== r.height;
     }
     if (changed) {
       itemRectsRef.current = rects;
@@ -198,33 +183,21 @@ export function useProximityHover<T extends HTMLElement>(
   // selection background is up — must invalidate the published rects even when
   // the container the effect below captured has since been remounted and the
   // ref points at a different element than the one being observed.
-  const itemRoRef = useRef<ResizeObserver | null>(null);
-  const getItemRo = useCallback(() => {
-    if (itemRoRef.current === null && typeof ResizeObserver !== "undefined") {
-      itemRoRef.current = new ResizeObserver(() =>
-        scheduleMeasurement(measurementAttempts),
-      );
-    }
-    return itemRoRef.current;
-  }, [scheduleMeasurement]);
-
   const registerItem = useCallback(
     (index: number, element: HTMLElement | null) => {
       if (element) {
         itemsRef.current.set(index, element);
-        getItemRo()?.observe(element);
       } else {
-        const previous = itemsRef.current.get(index);
-        if (previous) itemRoRef.current?.unobserve(previous);
         itemsRef.current.delete(index);
       }
+      setRegisteredItemsVersion((version) => version + 1);
       // Coalesce rapid register/unregister calls (e.g. when an AnimatePresence
       // remounts a list of rows) into a single remeasure on the next frame,
       // so consumers don't have to manually call measureItems after the
       // container's children swap.
       remeasure();
     },
-    [remeasure, getItemRo],
+    [remeasure],
   );
 
   const handleMouseMove = useCallback(
@@ -250,7 +223,7 @@ export function useProximityHover<T extends HTMLElement>(
         // item the cursor is actually inside (point-in-rect).
         if (axis === "xy") {
           let closestIndex: number | null = null;
-          let closestDistance = Infinity;
+          let closestDistance = Number.POSITIVE_INFINITY;
           let containingIndex: number | null = null;
 
           const rects = itemRectsRef.current;
@@ -261,14 +234,8 @@ export function useProximityHover<T extends HTMLElement>(
           // Map layout coords into visual/viewport space, accounting for any
           // cumulative ancestor transform: scale (see the single-axis note
           // below). X and Y scale independently.
-          const scaleX =
-            container.offsetWidth > 0
-              ? containerRect.width / container.offsetWidth
-              : 1;
-          const scaleY =
-            container.offsetHeight > 0
-              ? containerRect.height / container.offsetHeight
-              : 1;
+          const scaleX = container.offsetWidth > 0 ? containerRect.width / container.offsetWidth : 1;
+          const scaleY = container.offsetHeight > 0 ? containerRect.height / container.offsetHeight : 1;
 
           for (let index = 0; index < rects.length; index++) {
             const r = rects[index];
@@ -276,19 +243,12 @@ export function useProximityHover<T extends HTMLElement>(
             const el = itemsRef.current.get(index);
             if (el && isItemDisabled?.(el)) continue;
 
-            const left =
-              containerRect.left + (borderX + r.left - scrollX) * scaleX;
-            const top =
-              containerRect.top + (borderY + r.top - scrollY) * scaleY;
+            const left = containerRect.left + (borderX + r.left - scrollX) * scaleX;
+            const top = containerRect.top + (borderY + r.top - scrollY) * scaleY;
             const width = r.width * scaleX;
             const height = r.height * scaleY;
 
-            if (
-              mouseX >= left &&
-              mouseX <= left + width &&
-              mouseY >= top &&
-              mouseY <= top + height
-            ) {
+            if (mouseX >= left && mouseX <= left + width && mouseY >= top && mouseY <= top + height) {
               containingIndex = index;
             }
 
@@ -309,25 +269,20 @@ export function useProximityHover<T extends HTMLElement>(
         const mousePos = axis === "x" ? mouseX : mouseY;
 
         let closestIndex: number | null = null;
-        let closestDistance = Infinity;
+        let closestDistance = Number.POSITIVE_INFINITY;
         let containingIndex: number | null = null;
 
         const rects = itemRectsRef.current;
         // Convert content-relative rects to viewport coords using live scroll
-        const scrollOffset =
-          axis === "x" ? container.scrollLeft : container.scrollTop;
-        const borderOffset =
-          axis === "x" ? container.clientLeft : container.clientTop;
-        const containerEdge =
-          axis === "x" ? containerRect.left : containerRect.top;
+        const scrollOffset = axis === "x" ? container.scrollLeft : container.scrollTop;
+        const borderOffset = axis === "x" ? container.clientLeft : container.clientTop;
+        const containerEdge = axis === "x" ? containerRect.left : containerRect.top;
         // Item rects are layout values (offset*); the container's bounding rect
         // reflects any cumulative ancestor transform: scale. Compute the scale
         // factor so we can map layout coords into the same visual viewport
         // space the mouse cursor lives in.
-        const layoutSize =
-          axis === "x" ? container.offsetWidth : container.offsetHeight;
-        const visualSize =
-          axis === "x" ? containerRect.width : containerRect.height;
+        const layoutSize = axis === "x" ? container.offsetWidth : container.offsetHeight;
+        const visualSize = axis === "x" ? containerRect.width : containerRect.height;
         const scale = layoutSize > 0 ? visualSize / layoutSize : 1;
 
         for (let index = 0; index < rects.length; index++) {
@@ -337,8 +292,7 @@ export function useProximityHover<T extends HTMLElement>(
           if (el && isItemDisabled?.(el)) continue;
 
           const contentPos = axis === "x" ? r.left : r.top;
-          const itemStart =
-            containerEdge + (borderOffset + contentPos - scrollOffset) * scale;
+          const itemStart = containerEdge + (borderOffset + contentPos - scrollOffset) * scale;
           const itemSize = (axis === "x" ? r.width : r.height) * scale;
           const itemEnd = itemStart + itemSize;
 
@@ -379,14 +333,19 @@ export function useProximityHover<T extends HTMLElement>(
   // deliberately not dropped: the item set is unchanged, so the published rects
   // stay usable, and hiding overlays on every reflow would flicker them.
   useEffect(() => {
+    if (typeof ResizeObserver === "undefined") return;
     const container = containerRef.current;
-    if (!container || typeof ResizeObserver === "undefined") return;
-    const ro = new ResizeObserver(() =>
-      scheduleMeasurement(measurementAttempts),
-    );
-    ro.observe(container);
-    return () => ro.disconnect();
-  }, [containerRef, scheduleMeasurement]);
+    const observer = new ResizeObserver(() => scheduleMeasurement(measurementAttempts));
+
+    if (container) observer.observe(container);
+    for (const element of Array.from(itemsRef.current.values())) {
+      observer.observe(element);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [containerRef, registeredItemsVersion, scheduleMeasurement]);
 
   // Clean up rAF and the item observer on unmount
   useEffect(() => {
@@ -397,8 +356,6 @@ export function useProximityHover<T extends HTMLElement>(
       if (remeasureRafIdRef.current !== null) {
         cancelAnimationFrame(remeasureRafIdRef.current);
       }
-      itemRoRef.current?.disconnect();
-      itemRoRef.current = null;
     };
   }, []);
 

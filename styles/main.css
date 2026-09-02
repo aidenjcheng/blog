@@ -44,7 +44,7 @@
     --radius-large: 12px;
     --destructive-foreground: var(--color-red-700);
     --hover: color-mix(in srgb, var(--fg) 8%, transparent);
-    --active: rgb(0 0 0 / 0.07);
+    --active: rgb(0 0 0 / 7%);
     --selected: #d4d4d4;
     --destructive-light: #fef2f2;
     --overlay: 0 0 0;
@@ -420,17 +420,20 @@
       transparent
     );
   }
+
   .theme {
     --color-hover: var(--hover);
     --color-active: var(--active);
     --color-selected: var(--selected);
     --color-destructive-light: var(--destructive-light);
   }
+
   :focus-visible {
+    border-radius: var(--shape-input-radius, 8px);
     outline: 1px solid var(--focus-ring, #6b97ff);
     outline-offset: 2px;
-    border-radius: var(--shape-input-radius, 8px);
   }
+
   a:focus-visible {
     border-radius: 2px;
   }
@@ -448,7 +451,61 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /*
+  body {
+    @apply bg-background text-foreground;
+
+    position: relative;
+    min-height: 100vh;
+    isolation: isolate;
+  }
+
+  body::before {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    content: "";
+    background-image:
+      radial-gradient(
+        42% 62% at 0% 72%,
+        rgb(15 18 65 / 100%) 0%,
+        rgb(15 18 65 / 96%) 42%,
+        rgb(15 18 65 / 0%) 78%
+      ),
+      radial-gradient(
+        58% 78% at 42% 32%,
+        rgb(36 42 182 / 92%) 0%,
+        rgb(31 38 163 / 92%) 48%,
+        rgb(26 34 131 / 60%) 82%,
+        rgb(26 34 131 / 0%) 100%
+      ),
+      radial-gradient(
+        52% 58% at 100% 18%,
+        rgb(42 105 245 / 48%) 0%,
+        rgb(42 105 245 / 22%) 42%,
+        rgb(42 105 245 / 0%) 78%
+      ),
+      linear-gradient(135deg, #17174d 0%, #1d2280 38%, #1f2b96 100%);
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 220ms ease-in-out;
+    will-change: opacity;
+  }
+
+  html.dark body::before {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body::before {
+      transition: none;
+    }
+  }
+  */
 }
+
 html.transitioning *,
 html.transitioning *::before,
 html.transitioning *::after {
@@ -458,5 +515,6 @@ html.transitioning *::after {
     color 180ms ease-in-out,
     border-color 180ms ease-in-out,
     fill 180ms ease-in-out,
-    stroke 180ms ease-in-out !important;
+    stroke 180ms ease-in-out,
+    opacity 220ms ease-in-out !important;
 }

@@ -132,7 +132,7 @@ export type IconName =
   | "folder"
   | "sliders-horizontal";
 
-export const defaultIcons: Record<IconName, IconComponent> = {
+const defaultIcons: Record<IconName, IconComponent> = {
   "chevron-right": ChevronRight,
   "chevron-down": ChevronDown,
   pipette: Pipette,

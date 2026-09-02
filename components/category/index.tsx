@@ -8,13 +8,13 @@ interface PostProps {
   category: string;
 }
 
+const Seperator = () => <div className="border-border border-t" />;
+
 export const Category = ({ category }: PostProps) => {
   const posts = getPosts(category);
   const mostRecentPost = posts.reduce((latest, post) => {
     return new Date(post.time.updated).getTime() > new Date(latest.time.updated).getTime() ? post : latest;
   }, posts[0]);
-
-  const Seperator = () => <div className="border-border border-t" />;
 
   if (posts.length === 0) {
     return null;

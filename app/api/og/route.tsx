@@ -6,6 +6,11 @@ type Parameters = {
   title?: string;
 };
 
+const FONT_DATA = fetch(new URL("/public/assets/inter/regular.ttf", import.meta.url)).then((res) => {
+  if (!res.ok) throw new Error(`Failed to load font: ${res.status}`);
+  return res.arrayBuffer();
+});
+
 /*
  * To assist with generating dynamic Open Graph (OG) images, you can use the Vercel @vercel/og library to compute and generate social card images using Vercel Edge Functions.
  * @see: https://vercel.com/docs/functions/og-image-generation
@@ -28,8 +33,6 @@ export async function GET(request: Request) {
     /*
      * Finally we are fetching the font file from the public directory.
      */
-    const inter = fetch(new URL("/public/assets/inter/regular.ttf", import.meta.url)).then((res) => res.arrayBuffer());
-
     return new ImageResponse(
       <div
         style={{
@@ -72,7 +75,7 @@ export async function GET(request: Request) {
         fonts: [
           {
             name: "Inter",
-            data: await inter,
+            data: await FONT_DATA,
             weight: 400,
           },
         ],
